@@ -1,4 +1,5 @@
 #include <Windows.h>
+
 #include <iostream>
 #include <random>
 #include <math.h>
@@ -10,6 +11,7 @@
 
 #pragma comment(lib,"winmm.lib")
 #pragma comment(lib, "msimg32.lib")
+
 #define PI 3.1415926535
 
 
@@ -18,21 +20,22 @@ using namespace std;
 //#pragma comment(linker,"/entry:WinMainCRTStartup /subsystem:console")
 HINSTANCE g_hInst;
 LPCTSTR lpszClass = L"Window Class Name";
-LPCTSTR lpszWindowName = L"Windows Programming";
+LPCTSTR lpszWindowName = L"용사는 타이밍";
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 random_device rd;
 default_random_engine dre(rd());
-uniform_int_distribution<> uid(0, 2);
+uniform_int_distribution<> uid(0, 3);
 uniform_int_distribution<> puid(80, 120);
 uniform_int_distribution<> buid(1, 8);
-
+static bool AD;
+int sound_sec = 0;
 MCI_OPEN_PARMS mciOpen;
 MCI_PLAY_PARMS mciPlay;
 DWORD dwID1, dwID2, dwID3, dwID4, dwID5,dwID6;
-
+HWND hWnd;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdParam, int nCmdShow)
 {
-	HWND hWnd;
+	
 	MSG Message;
 	WNDCLASSEX WndClass; 
 	g_hInst = hInstance;
@@ -51,7 +54,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdPa
 	WndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 	RegisterClassEx(&WndClass);
 
-	hWnd = CreateWindow(lpszClass, lpszWindowName, WS_SYSMENU , 200, 100, 1280, 800, NULL, (HMENU)NULL, hInstance, NULL);
+	hWnd = CreateWindow(lpszClass, lpszWindowName, WS_SYSMENU , 0, 0, 1280, 800, NULL, (HMENU)NULL, hInstance, NULL);
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
@@ -71,7 +74,7 @@ enum DIRECTION {
 struct Charactor {
 	int Adirection, MJudgement, dodge, special;
 	double damage, def, hp, mp, maxhp;
-	int motion, stage;
+	int motion, stage, deadcount;
 	double percent;
 	POINT location;
 	bool behavior, alive, just, specialon, attack, kill;
@@ -85,14 +88,15 @@ struct Monster {
 	bool attack, alive, stun;
 };
 
-static bool mjust = false;
+static bool mjust = false, motion = false;
 static int x = 0, y = 0;
+
 void Cattack(Charactor* a, Monster* b)
 {
 	if (!mjust) {
 		if (a->cheat)
 			b->hp = 0;
-		b->hp = b->hp - (a->damage * puid(dre) / 100 - b->def);
+		b->hp = b->hp - ((a->damage * puid(dre) / 100) - b->def);
 		PlaySound(TEXT("blood.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	}
 	else {
@@ -106,6 +110,8 @@ void Cattack(Charactor* a, Monster* b)
 	if (b->hp <= 0) {
 		b->hp = 0;
 		b->alive = false;
+		AD = false;
+		SetTimer(hWnd, 23, 1000, NULL);
 		mciOpen.lpstrElementName = TEXT("Monster_Death.mp3");
 		mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)& mciOpen);
 		dwID6 = mciOpen.wDeviceID;
@@ -114,20 +120,29 @@ void Cattack(Charactor* a, Monster* b)
 		a->stage++;
 		b->stun = false;
 		a->kill = true;
-		a->maxhp = a->maxhp * 1.1;
-		a->hp = a->hp * 1.1;
-		a->def = a->def * 1.1;
-		a->damage = a->damage * 1.1;
+		if (a->deadcount == 0) {
+			a->maxhp = a->maxhp * 1.1;
+			a->hp = a->hp * 1.1;
+			a->def = a->def * 1.1;
+			a->damage = a->damage * 1.1;
+		}
+		else {
+			a->maxhp = a->maxhp * 1.05;
+			a->hp = a->hp * 1.05;
+			a->def = a->def * 1.05;
+			a->damage = a->damage * 1.05;
+		}
 		y = 40;
 	}
 }
+
 void Mattack(Monster* a, Charactor* b)
 {
 	if (b->cheat)
 		;
 	else
 	{
-		b->hp = b->hp - (a->damage * puid(dre) / 100 - b->def);
+		b->hp = b->hp - ((a->damage * puid(dre) / 100) - b->def);
 		b->percent = b->hp * 100 / b->maxhp;
 		PlaySound(TEXT("blood.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	}
@@ -135,10 +150,34 @@ void Mattack(Monster* a, Charactor* b)
 	if (b->hp <= 0) {
 		b->hp = 0;
 		b->alive = false;
+		SetTimer(hWnd, 23, 1000, NULL);
 		mciOpen.lpstrElementName = TEXT("Char_Death.mp3");
 		mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)& mciOpen);
 		dwID6 = mciOpen.wDeviceID;
 		mciSendCommand(dwID6, MCI_PLAY, MCI_NOTIFY, (DWORD)(LPVOID)& mciPlay);
+		y = 40;
+	}
+}
+
+void Mcattack(Monster* a, Charactor* b)
+{
+	if (b->cheat)
+		;
+	else
+	{
+		b->hp = b->hp - ((a->damage * 0.7 * puid(dre) / 100) - b->def);
+		b->percent = b->hp * 100 / b->maxhp;
+		PlaySound(TEXT("blood.wav"), NULL, SND_FILENAME | SND_ASYNC);
+	}
+	y = 10;
+	if (b->hp <= 0) {
+		b->hp = 0;
+		b->alive = false;
+		SetTimer(hWnd, 23, 1000, NULL);
+		mciOpen.lpstrElementName = TEXT("Char_Death.mp3");
+		mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)&mciOpen);
+		dwID6 = mciOpen.wDeviceID;
+		mciSendCommand(dwID6, MCI_PLAY, MCI_NOTIFY, (DWORD)(LPVOID)&mciPlay);
 		y = 40;
 	}
 }
@@ -151,17 +190,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 	static Charactor warrior;
 	static Monster mob[30];
 	static POINT just, monjust,chance;
-	static bool start,justout,mjustout, gameover, AD, Victory = false;
-	static int count;
+	static bool start,justout,mjustout, gameover, Victory = false, pattern = true, continuous_attack = false, left, right, up, down;
+	static int count, temp, temp1, temp2, temp3;
 	static int stage = 1;
-	static bool played = false;
+	static bool played_1 = false, played_2 = false;
 	int mx, my;
 	static int stuntype = 0;
 
-	//HBRUSH hBrush, oldBrush;
-
 	static HBITMAP hBitmapMonster, hBitmapbalpan, hBitmapStage1, hBitmapHP, hBitmapSpecial, hBitmapStage2, hBitmapJust, hBitmapChance, hBitmapMenu, hBitmapKill, 
-		hBitmapChance2, hBitmapEffect, hBitmapCM1, hBitmapScratch, hBitmapAD, hBitmapGameover,hBitmapStun1,hBitmapStun2,hBitmapbalpan2, hBitmapHeal,hBitmapDragon, hBitmapVictory;
+		hBitmapChance2, hBitmapEffect, hBitmapCM1, hBitmapScratch, hBitmapAD, hBitmapGameover,hBitmapStun1,hBitmapStun2,hBitmapbalpan2, hBitmapHeal,hBitmapDragon, 
+		hBitmapVictory, hBitmapDanger;
 	static int delay = 50, Mdelay = 1, decision, mobdelay = 50, rtcount = 0;
 	switch (iMessage) {
 	case WM_CREATE:
@@ -193,6 +231,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		hBitmapHeal = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP22));
 		hBitmapDragon = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP23));
 		hBitmapVictory = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP24));
+		hBitmapDanger = (HBITMAP)LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_BITMAP25));
 		start = false;
 		warrior.damage = 15;
 		warrior.def = 5;
@@ -206,6 +245,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		warrior.motion = 0;
 		warrior.stage = 0;
 		warrior.dodge = STOP;
+		warrior.deadcount = 0;
 		warrior.specialon = false;
 		warrior.kill = false;
 		warrior.alive = true;
@@ -220,8 +260,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		{
 			mob[i].hp = 100 * pow(1.15, i);
 			mob[i].maxhp = mob[i].hp;
-			mob[i].damage = 20 * pow(1.15, i);
-			mob[i].def = 5 * pow(1.15, i);;
+			mob[i].damage = 20 * pow(1.3, i);
+			mob[i].def = 5 * pow(1.15, i);
 			mob[i].location.x = 1000;
 			mob[i].location.y = 375;
 			mob[i].percent = 100;
@@ -233,22 +273,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			else if (i == 9) {
 				mob[i].type = i + 1;
 				mob[i].hp *= 2;
+				mob[i].maxhp = mob[i].hp;
+				mob[i].damage *= 1.5;
 			}
 			else if (i == 19) {
 				mob[i].type = i + 1;
 				mob[i].hp *= 3;
+				mob[i].maxhp = mob[i].hp;
+				mob[i].damage *= 2;
 			}
 		}
 		mob[0].alive = true;
 		break;
 	case WM_LBUTTONDOWN:
-
 		mx = LOWORD(lParam);
 		my = HIWORD(lParam);
+		// 시작 화면
 		if (!gameover) {
 			if (!start) {
 				if (mx > 490 && mx < 790) {
 					if (my > 440 && my < 500) {
+						played_1 = true;
 						mciSendCommand(dwID1, MCI_CLOSE, 0, NULL);
 						mciOpen.lpstrElementName = TEXT("Battle1.mp3");
 						mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)& mciOpen);
@@ -277,49 +322,61 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			dwID1 = mciOpen.wDeviceID;
 			mciSendCommand(dwID1, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)& mciPlay);
 			gameover = false;
-			played = false;
+			played_1 = false;
+			played_2 = false;
 			for (int i = 0; i < 30; ++i)
 			{
-				mob[i].hp = 100 * pow(1.15, i);;
+				mob[i].hp = 100 * pow(1.15, i);
 				mob[i].maxhp = mob[i].hp;
-				mob[i].damage = 20 * pow(1.15, i);;
-				mob[i].def = 5 * pow(1.15, i);;
+				mob[i].damage = 20 * pow(1.15, i);
+				mob[i].def = 5 * pow(1.15, i);
 				mob[i].location.x = 1000;
 				mob[i].location.y = 375;
 				mob[i].percent = 100;
 				mob[i].alive = false;
 				mob[i].stun = false;
-				warrior.maxhp = warrior.hp;
-				warrior.location.x = 200;
-				warrior.location.y = 375;
-				warrior.percent = 100;
-				warrior.special = 0;
-				warrior.motion = 0;
-				warrior.stage = 0;
-				warrior.dodge = STOP;
-				warrior.specialon = false;
-				warrior.kill = false;
-				warrior.alive = true;
 				if (i % 10 != 9) {
 					mob[i].type = i % 10 + 1;
 				}
 				else if (i == 9) {
 					mob[i].type = i + 1;
 					mob[i].hp *= 2;
+					mob[i].maxhp = mob[i].hp;
+					mob[i].damage *= 1.5;
 				}
 				else if (i == 19) {
 					mob[i].type = i + 1;
 					mob[i].hp *= 3;
+					mob[i].maxhp = mob[i].hp;
+					mob[i].damage *= 2;
 				}
 			}
 			mob[0].alive = true;
 			warrior.percent = 100;
+			warrior.hp = warrior.maxhp;
+			warrior.mp = 10;
+			warrior.location.x = 200;
+			warrior.location.y = 375;
+			warrior.percent = 100;
+			warrior.special = 0;
+			warrior.motion = 0;
+			warrior.stage = 0;
+			warrior.dodge = STOP;
+			warrior.specialon = false;
+			warrior.kill = false;
+			warrior.deadcount++;
+			warrior.alive = true;
 		}
-		if (start) {
+
+		if (start && !gameover) {
 			if (wParam == 'S') {
 				if (warrior.mp == 10) {
 					PlaySound(TEXT("Heal.wav"), NULL, SND_FILENAME | SND_ASYNC);
-					warrior.hp += warrior.hp / 10;
+					warrior.hp += (warrior.maxhp / 6);
+					warrior.damage *= 1.5;
+					warrior.def *= 15;
+					SetTimer(hWnd, 16, 3000, NULL);
+					SetTimer(hWnd, 17, 500, NULL);
 					warrior.mp = 0;
 					warrior.percent = warrior.hp * 100 / warrior.maxhp;
 					if (warrior.percent > 100) {
@@ -423,25 +480,58 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 		BackBit = CreateCompatibleBitmap(MemDC, bufferRT.right, bufferRT.bottom);
 		oldBackBit = (HBITMAP)SelectObject(hdc, BackBit);
 		PatBlt(hdc, 0, 0, bufferRT.right, bufferRT.bottom, WHITENESS);
+	
+		if (start) {
+			if (warrior.stage >= 0 && warrior.stage <= 8 || warrior.stage >= 10 && warrior.stage <= 18) {
+				if (played_1 == false) {
+					played_2 = false;
+					mciSendCommand(dwID4, MCI_CLOSE, 0, NULL);
+					mciOpen.lpstrElementName = TEXT("Battle1.mp3");
+					mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)& mciOpen);
+					dwID3 = mciOpen.wDeviceID;
+					mciSendCommand(dwID3, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)& mciPlay);
+					played_1 = true;
+				}
+			}
+			if (warrior.stage == 9 || warrior.stage == 19) {
+				if (played_2 == false) {
+					played_1 = false;
+					mciSendCommand(dwID3, MCI_CLOSE, 0, NULL);
+					mciOpen.lpstrElementName = TEXT("Battle2.mp3");
+					mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)& mciOpen);
+					dwID4 = mciOpen.wDeviceID;
+					mciSendCommand(dwID4, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)& mciPlay);
+					played_2 = true;
 
-		
+				}
+			}
+		}
+		// 시작
 		if (start == false) {
 			memdc = CreateCompatibleDC(hdc);
 			SelectObject(memdc, hBitmapMenu);
 			StretchBlt(hdc, 0, 0, 1280, 800, memdc, 0, 0, 2220, 1080, SRCCOPY);
 			DeleteDC(memdc);
 		}
+		// 게임 오버
 		if (gameover) {
 			memdc = CreateCompatibleDC(hdc);
 			SelectObject(memdc, hBitmapGameover);
 			TransparentBlt(hdc, 0, 0, 1280, 800, memdc, 0, 0, 960, 467, RGB(255, 255, 255));
 			DeleteDC(memdc);
 		}
+		// 승리
 		if (Victory) {
+			mciOpen.lpstrElementName = TEXT("victory.mp3");
+			mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)& mciOpen);
+			dwID5 = mciOpen.wDeviceID;
+			mciSendCommand(dwID5, MCI_PLAY, MCI_NOTIFY, (DWORD)(LPVOID)& mciPlay);
 			memdc = CreateCompatibleDC(hdc);
 			SelectObject(memdc, hBitmapVictory);
 			StretchBlt(hdc, 0, 0, 1280, 800, memdc, 0, 0, 2220, 1080, SRCCOPY);
 			DeleteDC(memdc);
+			mciSendCommand(dwID4, MCI_CLOSE, 0, NULL);
+			
 		}
 		if (start && !Victory) {
 			// 배경 출력
@@ -449,41 +539,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				stage = 1;
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapStage1);
-				StretchBlt(hdc, 0 - sin(x) * y, 0 - sin(x) * y, 1280, 800, memdc, 0, 0, 2200, 1080, SRCCOPY);
+				StretchBlt(hdc, 0, 0 - sin(x) * y, 1280, 800, memdc, 0, 0, 2200, 1080, SRCCOPY);
 				DeleteDC(memdc);
 			}
 			else if (warrior.stage <= 20 && warrior.stage > 9) {
-				stage = 2;
-				if (played == false) {
-					mciSendCommand(dwID3, MCI_CLOSE, 0, NULL);
-					mciOpen.lpstrElementName = TEXT("Battle2.mp3");
-					mciSendCommand(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD)(LPVOID)& mciOpen);
-					dwID4 = mciOpen.wDeviceID;
-					mciSendCommand(dwID4, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD)(LPVOID)& mciPlay);
-					played = true;
-				}
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapStage2);
-				StretchBlt(hdc, 0 - sin(x) * y, 0 - sin(x) * y, 1280, 800, memdc, 0, 0, 2200, 1080, SRCCOPY);
+				StretchBlt(hdc, 0, 0 - sin(x) * y, 1280, 800, memdc, 0, 0, 2200, 1080, SRCCOPY);
 				DeleteDC(memdc);
 			}
-			// 힐
+			// 힐 아이콘
 			memdc = CreateCompatibleDC(hdc);
 			SelectObject(memdc, hBitmapHeal);
-			TransparentBlt(hdc, 550 - sin(x) * y, 600 - sin(x) * y, 100, 100, memdc, 0, 0, 169, 169, RGB(206, 206, 156));
+			TransparentBlt(hdc, 550, 600 - sin(x) * y, 100, 100, memdc, 0, 0, 169, 169, RGB(206, 206, 156));
 			DeleteDC(memdc);
 
 			// HP바, 스페셜어택바
 			memdc = CreateCompatibleDC(hdc);
 			SelectObject(memdc, hBitmapHP);
-			TransparentBlt(hdc, 125 - sin(x) * y, 600 - sin(x) * y, 200, 25, memdc, 0, 0, 311, 48, RGB(255, 255, 255));
-			TransparentBlt(hdc, 134 - sin(x) * y, 607 - sin(x) * y, 183, 12, memdc, 180, 24, 1, 1, RGB(255, 255, 255));
-			TransparentBlt(hdc, 925 - sin(x) * y, 600 - sin(x) * y, 200, 25, memdc, 0, 0, 311, 48, RGB(255, 255, 255));
-			TransparentBlt(hdc, 934 - sin(x) * y, 607 - sin(x) * y, 183, 12, memdc, 180, 24, 1, 1, RGB(255, 255, 255));
-			TransparentBlt(hdc, 134 - sin(x) * y, 607 - sin(x) * y, warrior.percent * 1.83, 12, memdc, 120, 24, 1, 1, RGB(255, 255, 255));
-			TransparentBlt(hdc, 300 - sin(x) * y, 150 - sin(x) * y, 600, 10, memdc, 120, 24, 1, 1, RGB(255, 255, 255));
-			TransparentBlt(hdc, 300 - sin(x) * y, 150 - sin(x) * y, warrior.special * 120, 10, memdc, 180, 24, 1, 1, RGB(255, 255, 255));
-			TransparentBlt(hdc, 550 - sin(x) * y, 600 - sin(x) * y, 100, 100 - warrior.mp * 10, memdc, 180, 24, 1, 1, RGB(255, 255, 155));
+			TransparentBlt(hdc, 125, 600 - sin(x) * y, 200, 25, memdc, 0, 0, 311, 48, RGB(255, 255, 255));
+			TransparentBlt(hdc, 134, 607 - sin(x) * y, 183, 12, memdc, 180, 24, 1, 1, RGB(255, 255, 255));
+			TransparentBlt(hdc, 925, 600 - sin(x) * y, 200, 25, memdc, 0, 0, 311, 48, RGB(255, 255, 255));
+			TransparentBlt(hdc, 934, 607 - sin(x) * y, 183, 12, memdc, 180, 24, 1, 1, RGB(255, 255, 255));
+			TransparentBlt(hdc, 134, 607 - sin(x) * y, warrior.percent * 1.83, 12, memdc, 120, 24, 1, 1, RGB(255, 255, 255));
+			TransparentBlt(hdc, 300, 150 - sin(x) * y, 600, 10, memdc, 120, 24, 1, 1, RGB(255, 255, 255));
+			TransparentBlt(hdc, 300, 150 - sin(x) * y, warrior.special * 120, 10, memdc, 180, 24, 1, 1, RGB(255, 255, 255));
+			TransparentBlt(hdc, 550, 600 - sin(x) * y, 100, 100 - warrior.mp * 10, memdc, 180, 24, 1, 1, RGB(255, 255, 155));
 			DeleteDC(memdc);
 
 			
@@ -492,34 +573,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			if (warrior.kill) {
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapKill);
-				TransparentBlt(hdc, 500 - sin(x) * y, 160 - sin(x) * y, 200, 70, memdc, 0, 0, 230, 92, RGB(255, 255, 255));
+				TransparentBlt(hdc, 500, 160 - sin(x) * y, 200, 70, memdc, 0, 0, 230, 92, RGB(255, 255, 255));
 				DeleteDC(memdc);
 			}
 			if (warrior.specialon) {
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapChance2);
-				TransparentBlt(hdc, 350 - sin(x) * y, 160 - sin(x) * y, 500, 80, memdc, 0, 0, 572, 107, RGB(255, 255, 255));
+				TransparentBlt(hdc, 350, 160 - sin(x) * y, 500, 80, memdc, 0, 0, 572, 107, RGB(255, 255, 255));
 				DeleteDC(memdc);
 			}
 			if (AD) {
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapAD);
-				TransparentBlt(hdc, 350 - sin(x) * y, 160 - sin(x) * y, 500, 80, memdc, 0, 0, 849, 108, RGB(255, 255, 255));
+				TransparentBlt(hdc, 350, 160 - sin(x) * y, 500, 80, memdc, 0, 0, 849, 108, RGB(255, 255, 255));
 				DeleteDC(memdc);
 			}
 			// 발판
 			if (warrior.stage <= 9) {
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapbalpan);
-				TransparentBlt(hdc, 150 - sin(x) * y, 375 - sin(x) * y, 150, 150, memdc, 0, 0, 340, 194, RGB(255, 255, 255));
-				TransparentBlt(hdc, 950 - sin(x) * y, 375 - sin(x) * y, 150, 150, memdc, 0, 0, 340, 194, RGB(255, 255, 255));
+				TransparentBlt(hdc, 150, 375 - sin(x) * y, 150, 150, memdc, 0, 0, 340, 194, RGB(255, 255, 255));
+				TransparentBlt(hdc, 950, 375 - sin(x) * y, 150, 150, memdc, 0, 0, 340, 194, RGB(255, 255, 255));
 				DeleteDC(memdc);
 			}
 			else {
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapbalpan2);
-				TransparentBlt(hdc, 150 - sin(x) * y, 390 - sin(x) * y, 150, 125, memdc, 0, 0, 324, 137, RGB(255, 255, 255));
-				TransparentBlt(hdc, 950 - sin(x) * y, 390 - sin(x) * y, 150, 125, memdc, 0, 0, 324, 137, RGB(255, 255, 255));
+				TransparentBlt(hdc, 150, 390 - sin(x) * y, 150, 125, memdc, 0, 0, 324, 137, RGB(255, 255, 255));
+				TransparentBlt(hdc, 950, 390 - sin(x) * y, 150, 125, memdc, 0, 0, 324, 137, RGB(255, 255, 255));
 				DeleteDC(memdc);
 			}
 
@@ -607,15 +688,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 					}
 					memdc = CreateCompatibleDC(hdc);
 					SelectObject(memdc, hBitmapHP);
-					TransparentBlt(hdc, 934, 607, mob[i].percent * 1.83, 12, memdc, 120, 24, 1, 1, RGB(255, 255, 255));
+					TransparentBlt(hdc, 934, 607 - sin(x) * y, mob[i].percent * 1.83, 12, memdc, 120, 24, 1, 1, RGB(255, 255, 255));
 					DeleteDC(memdc);
 				}
 			}
-
 			if (warrior.specialon) {
 				memdc = CreateCompatibleDC(hdc);
 				SelectObject(memdc, hBitmapEffect);
-				TransparentBlt(hdc, warrior.location.x - 165 - sin(x) * y, warrior.location.y - 135 - sin(x) * y, 400, 400, memdc, 0, 0, 540, 520, RGB(206, 206, 156));
+				TransparentBlt(hdc, warrior.location.x - 165, warrior.location.y - 135 - sin(x) * y, 400, 400, memdc, 0, 0, 540, 520, RGB(206, 206, 156));
 				DeleteDC(memdc);
 			}
 			// 캐릭터 출력
@@ -623,22 +703,63 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				if (!warrior.motion) {
 					memdc = CreateCompatibleDC(hdc);
 					SelectObject(memdc, hBitmapMonster);
-					TransparentBlt(hdc, warrior.location.x - 25 - sin(x) * y, warrior.location.y - 15 - sin(x) * y, 125, 125, memdc, 1000, 300, 200, 200, RGB(255, 255, 255));
+					TransparentBlt(hdc, warrior.location.x - 25, warrior.location.y - 15 - sin(x) * y, 125, 125, memdc, 1000, 300, 200, 200, RGB(255, 255, 255));
 					DeleteDC(memdc);
 				}
 				else if (warrior.motion == 1) {
 					memdc = CreateCompatibleDC(hdc);
 					SelectObject(memdc, hBitmapCM1);
-					TransparentBlt(hdc, warrior.location.x - 25 - sin(x) * y, warrior.location.y - 15 - sin(x) * y, 100, 111, memdc, 0, 0, 87, 98, RGB(206, 206, 156));
+					TransparentBlt(hdc, warrior.location.x - 25, warrior.location.y - 15 - sin(x) * y, 100, 111, memdc, 0, 0, 87, 98, RGB(206, 206, 156));
 					DeleteDC(memdc);
 				}
 				else if (warrior.motion == 2) {
 					memdc = CreateCompatibleDC(hdc);
 					SelectObject(memdc, hBitmapMonster);
-					TransparentBlt(hdc, warrior.location.x - 20 - sin(x) * y, warrior.location.y - 20 - sin(x) * y, 175, 125, memdc, 1000, 550, 250, 200, RGB(255, 255, 255));
+					TransparentBlt(hdc, warrior.location.x - 20, warrior.location.y - 20 - sin(x) * y - 20, 175, 175, memdc, 1000, 500, 250, 300, RGB(255, 255, 255));
 					DeleteDC(memdc);
 				}
 			}
+			// 연속 공격 범위 표시
+			if (warrior.alive) {
+				if (right) {
+					memdc = CreateCompatibleDC(hdc);
+					SelectObject(memdc, hBitmapDanger);
+					TransparentBlt(hdc, 120 - sin(x) * y, 300 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 120 - sin(x) * y, 350 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 120 - sin(x) * y, 400 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 120 - sin(x) * y, 450 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					DeleteDC(memdc);
+				}
+				if (left) {
+					memdc = CreateCompatibleDC(hdc);
+					SelectObject(memdc, hBitmapDanger);
+					TransparentBlt(hdc, 240 - sin(x) * y, 300 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 240 - sin(x) * y, 350 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 240 - sin(x) * y, 400 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 240 - sin(x) * y, 450 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					DeleteDC(memdc);
+				}
+				if (up) {
+					memdc = CreateCompatibleDC(hdc);
+					SelectObject(memdc, hBitmapDanger);
+					TransparentBlt(hdc, 100 - sin(x) * y, 450 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 150 - sin(x) * y, 450 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 200 - sin(x) * y, 450 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 250 - sin(x) * y, 450 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					DeleteDC(memdc);
+				}
+				if (down) {
+					memdc = CreateCompatibleDC(hdc);
+					SelectObject(memdc, hBitmapDanger);
+					TransparentBlt(hdc, 100 - sin(x) * y, 300 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 150 - sin(x) * y, 300 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 200 - sin(x) * y, 300 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					TransparentBlt(hdc, 250 - sin(x) * y, 300 - sin(x) * y, 100, 100, memdc, 0, 0, 305, 297, RGB(255, 255, 255));
+					DeleteDC(memdc);
+				}
+			}
+
+
 			// just 출력
 			if (justout) {
 				memdc = CreateCompatibleDC(hdc);
@@ -702,7 +823,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 									SetTimer(hWnd, 8, 50, NULL);
 								}
 								if (!mob[i].alive) {
-									SetTimer(hWnd, 1, 5000, NULL);				// 죽었을 때 몬스터 생성 타이머 다시 돌림
+									SetTimer(hWnd, 1, 3000, NULL);				// 죽었을 때 몬스터 생성 타이머 다시 돌림
 								}
 							}
 						}
@@ -1331,6 +1452,48 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 							}
 						}
 						break;
+					case 9:
+						if (pattern) {
+							SetTimer(hWnd, 4, 250, NULL);
+							if (i == 19)						// 공격 횟수 설정
+								SetTimer(hWnd, 18, 1, NULL);
+							SetTimer(hWnd, 19, 501, NULL);
+							SetTimer(hWnd, 20, 1001, NULL);
+							SetTimer(hWnd, 21, 1501, NULL);
+							KillTimer(hWnd, 5);
+							motion = true;
+							pattern = false;
+							mob[i].attack = true;
+						}
+						if (motion) {
+							if (rtcount == 8) {
+								rtcount = 0;
+								motion = false;
+								mob[i].location.x = 1000;
+							}
+							else if (mob[i].location.x >= 900 && mob[i].location.x < 1100 && mob[i].Adirection == RIGHT) {
+								mobdelay = 20;
+								mob[i].location.x += 25;
+							}
+							else if (mob[i].location.x == 900 && mob[i].Adirection == LEFT) {
+								mob[i].location.x += 25;
+								mob[i].Adirection = RIGHT;
+								rtcount++;
+							}
+							else if (mob[i].location.x > 900 && mob[i].location.x <= 1100 && mob[i].Adirection == LEFT) {
+								mob[i].location.x -= 25;
+							}
+							else if (mob[i].location.x == 1100 && mob[i].Adirection == RIGHT) {
+								mob[i].location.x -= 25;
+								mob[i].Adirection = LEFT;
+								rtcount++;
+							}
+						}
+						else {
+							pattern = true;
+							KillTimer(hWnd, 4);
+						}
+						break;
 					}
 				}
 			}
@@ -1345,6 +1508,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			break; 
 		// 몬스터 패턴 설정 타이머
 		case 5:
+			SetTimer(hWnd, 5, 5000, NULL);
 			for (int i = 0; i < 30; ++i)
 			{
 				if (mob[i].alive)
@@ -1360,7 +1524,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 					case 2:
 						while (1) {
 							decision = uid(dre);
-							if (decision != 2)
+							if (decision < 2)
 								break;
 						}
 						if (decision == 0)
@@ -1370,38 +1534,56 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 3:
-						if (decision == 0)
+						while (1) {
+							decision = uid(dre);
+							if (decision != 3)
+								break;
+						}
+ 						if (decision == 0)
 							mob[i].pattern = 1;
 						else if (decision == 1)
 							mob[i].pattern = 7;
 						else
 							mob[i].pattern = 8;
+						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 4:
+						while (1) {
+							decision = uid(dre);
+							if (decision != 3)
+								break;
+						}
 						if (decision == 0)
 							mob[i].pattern = 1;
 						else if (decision == 1)
 							mob[i].pattern = 3;
-						else
+						else if (decision == 2) 
 							mob[i].pattern = 4;
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 5:
 						if (decision == 0)
-							mob[i].pattern = 2;
-						else if (decision == 1)
 							mob[i].pattern = 3;
-						else
+						else if (decision == 1)
 							mob[i].pattern = 4;
+						else if (decision == 2)
+							mob[i].pattern = 5;
+						else
+							mob[i].pattern = 6;
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 6:
+						while (1) {
+							decision = uid(dre);
+							if (decision != 3)
+								break;
+						}
 						if (decision == 0)
 							mob[i].pattern = 1;
 						else if (decision == 1)
-							mob[i].pattern = 2;
+							mob[i].pattern = 5;
 						else
-							mob[i].pattern = 2;
+							mob[i].pattern = 6;
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 7:
@@ -1418,25 +1600,35 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 							mob[i].pattern = 3;
 						else if (decision == 1)
 							mob[i].pattern = 4;
+						else if (decision == 2)
+							mob[i].pattern = 5;
 						else
-							mob[i].pattern = 7;
+							mob[i].pattern = 6;
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 9:
 						if (decision == 0)
-							mob[i].pattern = 7;
+							mob[i].pattern = 3;
 						else if (decision == 1)
-							mob[i].pattern = 8;
+							mob[i].pattern = 4;
+						else if (decision == 2)
+							mob[i].pattern = 5;
 						else
-							mob[i].pattern = 1;
+							mob[i].pattern = 6;
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 10:
-						mob[i].pattern = buid(dre);
+						if (decision < 2)
+							mob[i].pattern = buid(dre);
+						else
+							mob[i].pattern = 9;
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					case 20:
-						mob[i].pattern = buid(dre);
+						if (decision < 2)
+							mob[i].pattern = buid(dre);
+						else
+							mob[i].pattern = 9;
 						SetTimer(hWnd, 4, 500, NULL);
 						break;
 					}
@@ -1493,6 +1685,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				KillTimer(hWnd, 10);
 			}
 			break;
+			// 필살기 & 공격을 퍼부으세요
 		case 11:
 			for (int i = 0; i < 30; ++i) {
 				mob[i].stun = false;
@@ -1510,8 +1703,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 					for (int i = 0; i < 30; ++i) {
 						if (mob[i].alive && !mob[i].attack) {
 							Cattack(&warrior, &mob[i]);
+							SetTimer(hWnd, 14, 50, NULL);
 							if (!mob[i].alive) {
-								SetTimer(hWnd, 1, 5000, NULL);				// 죽었을 때 몬스터 생성 타이머 다시 돌림
+								SetTimer(hWnd, 1, 3000, NULL);				// 죽었을 때 몬스터 생성 타이머 다시 돌림
 							}
 						}
 					}
@@ -1532,6 +1726,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				}
 			}
 			break;
+
 		case 13:
 			if (!warrior.alive) {
 				if (stage == 1) {
@@ -1549,6 +1744,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 			}
 			KillTimer(hWnd, 13);
 			break;
+			// 화면 흔들림
 		case 14:
 			if (x == 0) {
 				x -= 3;
@@ -1563,9 +1759,348 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMessage, WPARAM wParam, LPARAM lParam)
 				}
 
 			break;
+			// 클리어시 종료
 		case 15:
 			if (warrior.stage == 20)
 				PostQuitMessage(0);
+			break;
+			// 힐 버프 끝 (공격력 떨어짐)
+		case 16:
+			warrior.damage /= 1.5;
+			KillTimer(hWnd, 16);
+			break;
+			// 힐 버프 끝 (방어력 떨어짐)
+		case 17:
+			warrior.def /= 15;
+			KillTimer(hWnd, 17);
+			break;
+		case 18:	// 연속 공격 타이머
+			SetTimer(hWnd, 18, 2200, NULL);
+
+			if (continuous_attack) {
+				for (int i = 9; i <= 19; i += 10) {
+					if (mob[i].alive) {
+						if (temp == RIGHT) {
+							if (warrior.dodge != RIGHT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp == LEFT) {
+							if (warrior.dodge != LEFT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1; 
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp == UP) {
+							if (warrior.dodge != UP) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp == DOWN) {
+							if (warrior.dodge != DOWN) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+
+					}
+				}
+				KillTimer(hWnd, 18);
+			}
+			else {
+				temp = uid(dre) + 1;
+
+				if (temp == RIGHT)
+					right = true;
+				if (temp == LEFT)
+					left = true;
+				if (temp == UP)
+					up = true;
+				if (temp == DOWN)
+					down = true;
+
+				SetTimer(hWnd, 22, 400, NULL);
+			}
+
+			break;
+		case 19:	// 연속 공격 타이머
+			SetTimer(hWnd, 19, 2200, NULL);
+			if (continuous_attack) {
+				for (int i = 9; i <= 19; i += 10) {
+					if (mob[i].alive) {
+						if (temp1 == RIGHT) {
+							if (warrior.dodge != RIGHT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp1 == LEFT) {
+							if (warrior.dodge != LEFT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp1 == UP) {
+							if (warrior.dodge != UP) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp1 == DOWN) {
+							if (warrior.dodge != DOWN) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+
+					}
+				}
+				KillTimer(hWnd, 19);
+			}
+			else {
+				temp1 = uid(dre) + 1;
+
+
+				if (temp1 == RIGHT)
+					right = true;
+				if (temp1 == LEFT)
+					left = true;
+				if (temp1 == UP)
+					up = true;
+				if (temp1 == DOWN)
+					down = true;
+				
+				SetTimer(hWnd, 22, 400, NULL);
+
+			}
+			break;
+		case 20:	// 연속 공격 타이머
+			SetTimer(hWnd, 20, 2200, NULL);
+			if (continuous_attack) {
+				for (int i = 9; i <= 19; i += 10) {
+					if (mob[i].alive) {
+						if (temp2 == RIGHT) {
+							if (warrior.dodge != RIGHT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp2 == LEFT) {
+							if (warrior.dodge != LEFT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp2 == UP) {
+							if (warrior.dodge != UP) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp2 == DOWN) {
+							if (warrior.dodge != DOWN) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+
+					}
+				}
+				KillTimer(hWnd, 20);
+			}
+			else {
+				temp2 = uid(dre) + 1;
+
+				
+				if (temp2 == RIGHT)
+					right = true;
+				if (temp2 == LEFT)
+					left = true;
+				if (temp2 == UP)
+					up = true;
+				if (temp2 == DOWN)
+					down = true;
+
+				SetTimer(hWnd, 22, 400, NULL);
+			}
+			break;
+		case 21:	// 연속 공격 타이머
+			SetTimer(hWnd, 21, 2200, NULL);
+
+			if (continuous_attack) {
+				for (int i = 9; i <= 19; i += 10) {
+					if (mob[i].alive) {
+						if (temp3 == RIGHT) {
+							if (warrior.dodge != RIGHT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp3 == LEFT) {
+							if (warrior.dodge != LEFT) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp3 == UP) {
+							if (warrior.dodge != UP) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+						if (temp3 == DOWN) {
+							if (warrior.dodge != DOWN) {
+								Mcattack(&mob[i], &warrior);
+								SetTimer(hWnd, 14, 50, NULL);
+							}
+							else {
+								Mdelay = 1;
+								justout = true;
+								SetTimer(hWnd, 8, 50, NULL);
+								SetTimer(hWnd, 3, Mdelay, NULL);
+							}
+						}
+
+					}
+				}
+				continuous_attack = false;
+				SetTimer(hWnd, 5, 3000, NULL);
+				warrior.special++;
+				if (warrior.special == 5) {
+					SetTimer(hWnd, 9, 2000, NULL);
+					warrior.specialon = true;
+					SetTimer(hWnd, 10, 50, NULL);
+				}
+				KillTimer(hWnd, 21);
+			}
+			else {
+				temp3 = uid(dre) + 1;
+
+				if (temp3 == RIGHT)
+					right = true;
+				if (temp3 == LEFT)
+					left = true;
+				if (temp3 == UP)
+					up = true;
+				if (temp3 == DOWN)
+					down = true;
+				mob[9].attack = false;
+				mob[19].attack = false;
+				SetTimer(hWnd, 22, 400, NULL);
+				continuous_attack = true;
+			}
+			break;
+		case 22:
+			right = false;
+			up = false;
+			down = false;
+			left = false;
+			KillTimer(hWnd, 22);
+			break;
+		case 23:
+
+			if (sound_sec == 2) {
+				mciSendCommand(dwID6, MCI_CLOSE, 0, NULL);
+				sound_sec = 0;
+				KillTimer(hWnd, 23);
+				
+				break;
+			}
+			else {
+				sound_sec++;
+			}
 			break;
 		}
 
