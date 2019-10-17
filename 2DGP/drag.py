@@ -1,31 +1,48 @@
 from pico2d import *
+import os
 import random
+
+os.chdir("D:\\Programming\\Project\\2DGP")
+
 
 
 class Dice:
     def __init__(self):
-        self.level = 1
-        self.image = load_image("fire_dice.png")
-        self.bullet = load_image("fire_bullet.png")
-        self.x = 100
-        self.y = 100
+        self.level = 6
+        self.image = load_image('image\\fire_dice.png')
+        self.bullet = load_image('image\\fire_bullet.png')
+        self.x = 509
+        self.y = 417
 
     def draw(self):
-        self.image.draw(self.x, self.y)
+        self.image.draw(self.x, self.y, 95, 95)
         if self.level == 1:
-            self.bullet.draw(self. x, self. y)
-        #elif self.level == 2:
-
-        #elif self.level == 3:
-
-        #elif self.level == 4:
-
-        #elif self.level == 5:
-
-        #elif self.level == 6:
-
-
-
+            self.bullet.draw(self.x+2, self.y, 95, 95)
+        elif self.level == 2:
+            self.bullet.draw(self.x+15+2,self.y+15,95,95)
+            self.bullet.draw(self.x-15+2,self.y-15,95,95)
+        elif self.level == 3:
+            self.bullet.draw(self.x+2, self.y, 95, 95)
+            self.bullet.draw(self.x + 15+2, self.y + 15, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y - 15, 95, 95)
+        elif self.level == 4:
+            self.bullet.draw(self.x + 15+2, self.y + 15, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y - 15, 95, 95)
+            self.bullet.draw(self.x + 15+2, self.y - 15, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y + 15, 95, 95)
+        elif self.level == 5:
+            self.bullet.draw(self.x+2, self.y, 95, 95)
+            self.bullet.draw(self.x + 15+2, self.y + 15, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y - 15, 95, 95)
+            self.bullet.draw(self.x + 15+2, self.y - 15, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y + 15, 95, 95)
+        elif self.level == 6:
+            self.bullet.draw(self.x + 15+2, self.y + 15, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y - 15, 95, 95)
+            self.bullet.draw(self.x + 15+2, self.y - 15, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y + 15, 95, 95)
+            self.bullet.draw(self.x + 15+2, self.y, 95, 95)
+            self.bullet.draw(self.x - 15+2, self.y, 95, 95)
 
 def handle():
     global running
@@ -38,13 +55,19 @@ def handle():
 
 
 running = True
-#background = load_image("background.png")
-dice1 = Dice()
-dice2 = Dice()
+
 open_canvas(800, 600)
+
+background = load_image("image\\background.png")
+dice_1 = Dice()
+
 while running:
+    handle()
     clear_canvas()
- #   background.draw(400, 300)
-    dice1.draw()
-    dice2.draw()
+    background.draw(400, 300)
+    dice_1.draw()
+
     update_canvas()
+
+    delay(0.05)
+close_canvas()
