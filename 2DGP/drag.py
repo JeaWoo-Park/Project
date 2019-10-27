@@ -80,7 +80,7 @@ class Dice_Position:
 class Buy_Button:
     def __init__(self):
         self.szie = 79
-        self.image = load_image("image\\buy_button.jpg")
+        self.image = load_image("image\\buy_button.png")
         self.x = 400
         self.y = 122
         self.size = 79
@@ -105,74 +105,8 @@ class Dice:
         self.image = load_image('image\\fire_dice.png')
         self.bullet = load_image('image\\fire_bullet.png')
         self.position = Dice_Position(self.index)
-        loop = True
-        while loop:
-            if self.index == 1:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 2:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 3:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 4:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 5:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 6:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 7:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 8:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 9:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 10:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 11:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 12:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 13:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 14:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 15:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            elif self.index == 16:
-                self.x = self.position.x
-                self.y = self.position.y
-                loop = False
-            else:
-                pass
+        self.x = self.position.x
+        self.y = self.position.y
 
     def create(self):
         self.locate = True
@@ -195,6 +129,7 @@ class Dice:
     def go_back(self):
         self.x = self.position.x
         self.y = self.position.y
+        self.drag = False
 
     def on_drag(self):
         self.drag = True
@@ -267,148 +202,9 @@ def handle():
                 buy_button.mouse = True
             else:
                 buy_button.mouse = False
-        if event.type == SDL_QUIT:
-            running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
-        elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
-            if 365 < event.x < 435 and 599 - 157 < event.y < 599 - 96:
-                Create_Dice()
-            elif 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
-                if not dice[0].locate:
-                    break
-                index = 0
+        if event.type == SDL_MOUSEBUTTONUP and event.button == SDL_BUTTON_LEFT:
 
-                x = dice[0].position.x
-                y = dice[0].position.y
-                dice[0].on_drag()
-            elif 363 - 35 < event.x < 363 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[1].locate:
-                    break
-                index = 1
-
-                x = dice[1].position.x
-                y = dice[1].position.y
-                dice[1].on_drag()
-            elif 436 - 35 < event.x < 436 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[2].locate:
-                    break
-                index = 2
-
-                x = dice[2].position.x
-                y = dice[2].position.y
-                dice[2].on_drag()
-            elif 509 - 35 < event.x < 509 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[3].locate:
-                    break
-                index = 3
-
-                x = dice[3].position.x
-                y = dice[3].position.y
-                dice[3].on_drag()
-            elif 290 - 35 < event.x < 290 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[4].locate:
-                    break
-                index = 4
-
-                x = dice[4].position.x
-                y = dice[4].position.y
-                dice[4].on_drag()
-            elif 363 - 35 < event.x < 363 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[5].locate:
-                    break
-                index = 5
-
-                x = dice[5].position.x
-                y = dice[5].position.y
-                dice[5].on_drag()
-            elif 436 - 35 < event.x < 436 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[6].locate:
-                    break
-                index = 6
-
-                x = dice[6].position.x
-                y = dice[6].position.y
-                dice[6].on_drag()
-            elif 509 - 35 < event.x < 509 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[7].locate:
-                    break
-                index = 7
-
-                x = dice[7].position.x
-                y = dice[7].position.y
-                dice[7].on_drag()
-            elif 290 - 35 < event.x < 290 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[8].locate:
-                    break
-                index = 8
-
-                x = dice[8].position.x
-                y = dice[8].position.y
-                dice[8].on_drag()
-            elif 363 - 35 < event.x < 363 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[9].locate:
-                    break
-                index = 9
-
-                x = dice[9].position.x
-                y = dice[9].position.y
-                dice[9].on_drag()
-            elif 436 - 35 < event.x < 436 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[10].locate:
-                    break
-                index = 10
-
-                x = dice[10].position.x
-                y = dice[10].position.y
-                dice[10].on_drag()
-            elif 509 - 35 < event.x < 509 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[11].locate:
-                    break
-                index = 11
-
-                x = dice[11].position.x
-                y = dice[11].position.y
-                dice[11].on_drag()
-            elif 290 - 35 < event.x < 290 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[12].locate:
-                    break
-                index = 12
-
-                x = dice[12].position.x
-                y = dice[12].position.y
-                dice[12].on_drag()
-
-            elif 363 - 35 < event.x < 363 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[13].locate:
-                    break
-                index = 13
-
-                x = dice[13].position.x
-                y = dice[13].position.y
-                dice[13].on_drag()
-
-            elif 436 - 35 < event.x < 436 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[14].locate:
-                    break
-                index = 14
-
-                x = dice[14].position.x
-                y = dice[14].position.y
-                dice[14].on_drag()
-
-            elif 509 - 35 < event.x < 509 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[15].locate:
-                    break
-                index = 15
-
-                x = dice[15].position.x
-                y = dice[15].position.y
-                dice[15].on_drag()
-
-        elif event.type == SDL_MOUSEBUTTONUP:
             if 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383 and dice[0].locate:
-
                 if dice[0].level == dice[index].level and index != 0:
                     dice[index].off_drag()
                     dice[0].level += 1
@@ -557,6 +353,148 @@ def handle():
             else:
                 dice[index].off_drag()
                 dice[index].go_back()
+        elif event.type == SDL_QUIT:
+            running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
+        elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
+
+            for i in range(16):
+                dice[i].off_drag()
+
+            if 365 < event.x < 435 and 599 - 157 < event.y < 599 - 96:
+                Create_Dice()
+            elif 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
+                if not dice[0].locate:
+                    break
+                index = 0
+
+                x = dice[0].position.x
+                y = dice[0].position.y
+                dice[0].on_drag()
+            elif 363 - 35 < event.x < 363 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
+                if not dice[1].locate:
+                    break
+                index = 1
+
+                x = dice[1].position.x
+                y = dice[1].position.y
+                dice[1].on_drag()
+            elif 436 - 35 < event.x < 436 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
+                if not dice[2].locate:
+                    break
+                index = 2
+
+                x = dice[2].position.x
+                y = dice[2].position.y
+                dice[2].on_drag()
+            elif 509 - 35 < event.x < 509 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
+                if not dice[3].locate:
+                    break
+                index = 3
+
+                x = dice[3].position.x
+                y = dice[3].position.y
+                dice[3].on_drag()
+            elif 290 - 35 < event.x < 290 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
+                if not dice[4].locate:
+                    break
+                index = 4
+
+                x = dice[4].position.x
+                y = dice[4].position.y
+                dice[4].on_drag()
+            elif 363 - 35 < event.x < 363 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
+                if not dice[5].locate:
+                    break
+                index = 5
+
+                x = dice[5].position.x
+                y = dice[5].position.y
+                dice[5].on_drag()
+            elif 436 - 35 < event.x < 436 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
+                if not dice[6].locate:
+                    break
+                index = 6
+
+                x = dice[6].position.x
+                y = dice[6].position.y
+                dice[6].on_drag()
+            elif 509 - 35 < event.x < 509 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
+                if not dice[7].locate:
+                    break
+                index = 7
+
+                x = dice[7].position.x
+                y = dice[7].position.y
+                dice[7].on_drag()
+            elif 290 - 35 < event.x < 290 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                if not dice[8].locate:
+                    break
+                index = 8
+
+                x = dice[8].position.x
+                y = dice[8].position.y
+                dice[8].on_drag()
+            elif 363 - 35 < event.x < 363 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                if not dice[9].locate:
+                    break
+                index = 9
+
+                x = dice[9].position.x
+                y = dice[9].position.y
+                dice[9].on_drag()
+            elif 436 - 35 < event.x < 436 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                if not dice[10].locate:
+                    break
+                index = 10
+
+                x = dice[10].position.x
+                y = dice[10].position.y
+                dice[10].on_drag()
+            elif 509 - 35 < event.x < 509 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                if not dice[11].locate:
+                    break
+                index = 11
+
+                x = dice[11].position.x
+                y = dice[11].position.y
+                dice[11].on_drag()
+            elif 290 - 35 < event.x < 290 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                if not dice[12].locate:
+                    break
+                index = 12
+
+                x = dice[12].position.x
+                y = dice[12].position.y
+                dice[12].on_drag()
+
+            elif 363 - 35 < event.x < 363 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                if not dice[13].locate:
+                    break
+                index = 13
+
+                x = dice[13].position.x
+                y = dice[13].position.y
+                dice[13].on_drag()
+
+            elif 436 - 35 < event.x < 436 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                if not dice[14].locate:
+                    break
+                index = 14
+
+                x = dice[14].position.x
+                y = dice[14].position.y
+                dice[14].on_drag()
+
+            elif 509 - 35 < event.x < 509 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                if not dice[15].locate:
+                    break
+                index = 15
+
+                x = dice[15].position.x
+                y = dice[15].position.y
+                dice[15].on_drag()
 
 
 running = True
@@ -570,10 +508,8 @@ dice = [Dice(i) for i in range(16)]
 while running:
 
     clear_canvas()
+
     handle()
-    buy_button.update()
-    for d in dice:
-        d.update()
     background.draw(400, 300)
     buy_button.draw()
     for d in dice:
@@ -582,9 +518,11 @@ while running:
     for d in dice:
         if d.drag:
             d.draw()
-
+    buy_button.update()
+    for d in dice:
+        d.update()
     update_canvas()
 
-    delay(0.05)
+    # delay(0.05)
 
 close_canvas()
