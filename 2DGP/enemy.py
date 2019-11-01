@@ -1,6 +1,6 @@
 from pico2d import *
 import random
-
+import object
 
 class Enemy:
     image = None
@@ -18,6 +18,9 @@ class Enemy:
     def slow(self):
         self.speed = 0.15
 
+    def die(self):
+        object.remove_object(self)
+
     def update(self):
         if self.y > 514:
             self.y = 514
@@ -29,3 +32,6 @@ class Enemy:
             self.x += self.speed
         elif self.x == 674 and self.y > 100:
             self.y -= self.speed
+
+        if self.x == 674 and self.y < 100:
+            object.remove_object(self)
