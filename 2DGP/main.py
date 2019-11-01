@@ -2,6 +2,8 @@ from pico2d import *
 import random
 from dice import Dice
 from buy_button import Buy_Button
+from enemy import Enemy
+import object
 
 index = 0
 x = 0
@@ -341,11 +343,15 @@ open_canvas(800, 600)
 buy_button = Buy_Button()
 background = load_image("image\\background.png")
 dice = [Dice(i) for i in range(16)]
-
+cnt = 0
 while running:
 
-    clear_canvas()
+    if cnt % 350 == 0:
+        enemy = Enemy()
+        object.add_object(enemy, 1)
 
+    cnt += 1
+    clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
     for d in dice:
@@ -354,8 +360,12 @@ while running:
     for d in dice:
         if d.drag:
             d.draw()
+    for all_object in object.all_objects():
+        all_object.draw()
 
     handle()
+    for all_object in object.all_objects():
+        all_object.update()
     buy_button.update()
     for d in dice:
         d.update()
