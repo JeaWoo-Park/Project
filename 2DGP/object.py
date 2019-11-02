@@ -19,6 +19,20 @@ def remove_object(o):
             break
 
 
+def all_layer(layer):
+    for o in objects[layer]:
+        yield o
+
+
+def remove_layer(layer):
+    for o in all_layer(layer):
+        del o
+
+
+def bring_object(layer, idx):
+    return objects[layer][idx]
+
+
 def clear():
     for o in all_objects():
         del o

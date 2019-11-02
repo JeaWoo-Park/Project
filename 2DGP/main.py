@@ -349,7 +349,7 @@ frame = 0
 while running:
     if frame % 350 == 0:
         enemy = Enemy()
-        object.add_object(enemy, 1)
+        object.add_object(enemy, 0)
     frame += 1
     clear_canvas()
     background.draw(400, 300)

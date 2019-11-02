@@ -85,16 +85,23 @@ class Dice:
         self.position = Dice_Position(self.index)
         self.x = self.position.x
         self.y = self.position.y
+        self.timer = 0
 
     def create(self):
         self.exist = True
         self.level = 1
+        self.timer = 0
 
     def delete(self):
         self.exist = False
         self.level = 0
+        self.timer = 0
 
     def update(self):
+        if self.exist:
+            self.timer = (self.timer + 1) % 1000
+            if self.timer == 0:
+                self.attack(self, object.bring_object(0, 0))
         if self.drag:
             i = get_events()
             for event in i:
@@ -145,3 +152,91 @@ class Dice:
                 self.bullet.draw(self.x - 15 + 2, self.y + 15, 95, 95)
                 self.bullet.draw(self.x + 15 + 2, self.y, 95, 95)
                 self.bullet.draw(self.x - 15 + 2, self.y, 95, 95)
+
+    def attack(self, dice, target):
+        if self.exist:
+            if self.level == 1:
+                bullet = Bullet(self.x + 2, self.y)
+                object.add_object(bullet, 1)
+                pass
+            elif self.level == 2:
+                bullet = Bullet(self.x + 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                pass
+            elif self.level == 3:
+                bullet = Bullet(self.x + 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x + 2, self.y)
+                object.add_object(bullet, 1)
+                pass
+            elif self.level == 4:
+                bullet = Bullet(self.x + 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x + 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                pass
+            elif self.level == 5:
+                bullet = Bullet(self.x + 2, self.y)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x + 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x + 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                pass
+            elif self.level == 6:
+                bullet = Bullet(self.x + 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y + 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x + 15 + 2, self.y - 15)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x - 15 + 2, self.y)
+                object.add_object(bullet, 1)
+                bullet = Bullet(self.x + 15 + 2, self.y)
+                object.add_object(bullet, 1)
+                pass
+        pass
+
+
+class Bullet:
+
+    def __init__(self, x, y):
+        self.image = load_image("image\\fire_bullet.png")
+        self.timer = 0
+        self.speed = 0
+        self.x = x
+        self.y = y
+
+    def fire(self, target):
+        t = self.speed / 100
+        self.x = (1 - t) * self.x + t * target.x
+        self.y = (1 - t) * self.y + t * target.y
+        self.image.draw(self.x, self.y, 95, 95)
+
+    def draw(self):
+        self.image.draw(self.x, self.y, 95, 95)
+
+    def update(self):
+        self.timer = (self.timer + 1) % 1000
+
+        if self.timer % 20 == 0:
+            self.speed += 1
+            self.fire(object.bring_object(0, 0))
+        if object.bring_object(0, 0).x - 30 < self.x < object.bring_object(0, 0).x + 30 and \
+                object.bring_object(0, 0).y - 30 < self.y < object.bring_object(0, 0).y + 30:
+            object.remove_object(self)
+            object.bring_object(0, 0).hp -= 100

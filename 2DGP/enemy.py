@@ -18,7 +18,9 @@ class Enemy:
         self.x = 124
         self.y = 100
         self.speed = 0.2
+        self.hp = 500
         self.drawing_slow_effect = False
+        self.poison = False
 
     def draw(self):
         self.image.draw(self.x, self.y, 110, 110)
@@ -31,6 +33,7 @@ class Enemy:
 
     def die(self):
         object.remove_object(self)
+        object.remove_layer(1)
 
     def update(self):
         if self.y > 514:
@@ -46,4 +49,6 @@ class Enemy:
 
         if self.x == 674 and self.y < 100:
             object.remove_object(self)
-            life.hp -= 1
+            life.life_amount -= 1
+        if self.hp < 1:
+            self.die()
