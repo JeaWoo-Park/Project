@@ -33,7 +33,6 @@ class Enemy:
 
     def die(self):
         object.remove_object(self)
-        object.remove_layer(1)
 
     def update(self):
         if self.y > 514:
