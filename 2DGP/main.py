@@ -2,8 +2,8 @@ from pico2d import *
 import random
 from dice import Dice
 from buy_button import Buy_Button
-from enemy import Enemy
 from life import Life
+from enemy import Enemy
 
 import object
 
@@ -341,19 +341,18 @@ def handle():
 running = True
 
 open_canvas(800, 600)
+life = Life()
 buy_button = Buy_Button()
 background = load_image("image\\background.png")
 dice = [Dice(i) for i in range(16)]
-cnt = 0
+frame = 0
 while running:
-
-    if cnt % 350 == 0:
+    if frame % 350 == 0:
         enemy = Enemy()
         object.add_object(enemy, 1)
-    cnt += 1
+    frame += 1
     clear_canvas()
     background.draw(400, 300)
-
     buy_button.draw()
     for d in dice:
         if not d.drag:
@@ -363,7 +362,7 @@ while running:
             d.draw()
     for all_object in object.all_objects():
         all_object.draw()
-
+    life.draw()
     handle()
     for all_object in object.all_objects():
         all_object.update()

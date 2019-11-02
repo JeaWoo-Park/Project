@@ -1,17 +1,16 @@
 from pico2d import *
-import random
 import object
-from life import Life
+import life
 
 
 class Enemy:
     image = None
     slow_effect = None
-    life = None
+    poison_effect = None
 
     def __init__(self):
-        if Enemy.life is None:
-            Enemy.life = Life()
+        if Enemy.poison_effect is None:
+            Enemy.poison_effect = load_image("image\\poison_enemy.png")
         if Enemy.image is None:
             Enemy.image = load_image("image\\enemy.png")
         if Enemy.slow_effect is None:
@@ -25,7 +24,6 @@ class Enemy:
         self.image.draw(self.x, self.y, 110, 110)
         if self.drawing_slow_effect:
             self.slow_effect.draw(self.x, self.y - 5, 110, 110)
-        Enemy.life.draw()
 
     def slow(self):
         self.speed = 0.15
@@ -48,5 +46,4 @@ class Enemy:
 
         if self.x == 674 and self.y < 100:
             object.remove_object(self)
-            Enemy.life.hp -= 1
-
+            life.hp -= 1
