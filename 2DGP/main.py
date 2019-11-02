@@ -3,6 +3,8 @@ import random
 from dice import Dice
 from buy_button import Buy_Button
 from enemy import Enemy
+from life import Life
+
 import object
 
 index = 0
@@ -12,14 +14,14 @@ y = 0
 
 def Create_Dice():
     global dice
-    if dice[0].locate and dice[1].locate and dice[2].locate and dice[3].locate and dice[4].locate and \
-            dice[5].locate and dice[6].locate and dice[7].locate and dice[8].locate and dice[9].locate and \
-            dice[10].locate and \
-            dice[11].locate and dice[12].locate and dice[13].locate and dice[14].locate and dice[15].locate:
+    if dice[0].exist and dice[1].exist and dice[2].exist and dice[3].exist and dice[4].exist and \
+            dice[5].exist and dice[6].exist and dice[7].exist and dice[8].exist and dice[9].exist and \
+            dice[10].exist and \
+            dice[11].exist and dice[12].exist and dice[13].exist and dice[14].exist and dice[15].exist:
         return
         pass
     idx = random.randint(0, 15)
-    if dice[idx].locate:
+    if dice[idx].exist:
         Create_Dice()
         return
     dice[idx].create()
@@ -41,7 +43,7 @@ def handle():
         if event.type == SDL_MOUSEBUTTONUP:
             print('button UP')
             if event.button == SDL_BUTTON_LEFT:
-                if 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383 and dice[0].locate:
+                if 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
                     if dice[0].level == dice[index].level and index != 0:
                         dice[index].off_drag()
                         dice[0].level += 1
@@ -204,7 +206,7 @@ def handle():
             if 365 < event.x < 435 and 599 - 157 < event.y < 599 - 96:
                 Create_Dice()
             elif 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
-                if not dice[0].locate:
+                if not dice[0].exist:
                     break
                 index = 0
 
@@ -212,7 +214,7 @@ def handle():
                 y = dice[0].position.y
                 dice[0].on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[1].locate:
+                if not dice[1].exist:
                     break
                 index = 1
 
@@ -220,7 +222,7 @@ def handle():
                 y = dice[1].position.y
                 dice[1].on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[2].locate:
+                if not dice[2].exist:
                     break
                 index = 2
 
@@ -228,7 +230,7 @@ def handle():
                 y = dice[2].position.y
                 dice[2].on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[3].locate:
+                if not dice[3].exist:
                     break
                 index = 3
 
@@ -236,7 +238,7 @@ def handle():
                 y = dice[3].position.y
                 dice[3].on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[4].locate:
+                if not dice[4].exist:
                     break
                 index = 4
 
@@ -244,7 +246,7 @@ def handle():
                 y = dice[4].position.y
                 dice[4].on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[5].locate:
+                if not dice[5].exist:
                     break
                 index = 5
 
@@ -252,7 +254,7 @@ def handle():
                 y = dice[5].position.y
                 dice[5].on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[6].locate:
+                if not dice[6].exist:
                     break
                 index = 6
 
@@ -260,7 +262,7 @@ def handle():
                 y = dice[6].position.y
                 dice[6].on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[7].locate:
+                if not dice[7].exist:
                     break
                 index = 7
 
@@ -268,7 +270,7 @@ def handle():
                 y = dice[7].position.y
                 dice[7].on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[8].locate:
+                if not dice[8].exist:
                     break
                 index = 8
 
@@ -276,7 +278,7 @@ def handle():
                 y = dice[8].position.y
                 dice[8].on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[9].locate:
+                if not dice[9].exist:
                     break
                 index = 9
 
@@ -284,7 +286,7 @@ def handle():
                 y = dice[9].position.y
                 dice[9].on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[10].locate:
+                if not dice[10].exist:
                     break
                 index = 10
 
@@ -292,7 +294,7 @@ def handle():
                 y = dice[10].position.y
                 dice[10].on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[11].locate:
+                if not dice[11].exist:
                     break
                 index = 11
 
@@ -300,7 +302,7 @@ def handle():
                 y = dice[11].position.y
                 dice[11].on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[12].locate:
+                if not dice[12].exist:
                     break
                 index = 12
 
@@ -309,7 +311,7 @@ def handle():
                 dice[12].on_drag()
 
             elif 363 - 35 < event.x < 363 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[13].locate:
+                if not dice[13].exist:
                     break
                 index = 13
 
@@ -318,7 +320,7 @@ def handle():
                 dice[13].on_drag()
 
             elif 436 - 35 < event.x < 436 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[14].locate:
+                if not dice[14].exist:
                     break
                 index = 14
 
@@ -327,7 +329,7 @@ def handle():
                 dice[14].on_drag()
 
             elif 509 - 35 < event.x < 509 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[15].locate:
+                if not dice[15].exist:
                     break
                 index = 15
 
@@ -339,7 +341,6 @@ def handle():
 running = True
 
 open_canvas(800, 600)
-
 buy_button = Buy_Button()
 background = load_image("image\\background.png")
 dice = [Dice(i) for i in range(16)]
@@ -349,10 +350,10 @@ while running:
     if cnt % 350 == 0:
         enemy = Enemy()
         object.add_object(enemy, 1)
-
     cnt += 1
     clear_canvas()
     background.draw(400, 300)
+
     buy_button.draw()
     for d in dice:
         if not d.drag:

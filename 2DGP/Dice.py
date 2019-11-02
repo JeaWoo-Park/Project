@@ -1,4 +1,5 @@
 from pico2d import *
+import object
 
 
 class Dice_Position:
@@ -72,10 +73,11 @@ class Dice_Position:
             else:
                 pass
 
+
 class Dice:
     def __init__(self, index):
         self.drag = False
-        self.locate = False
+        self.exist = False
         self.level = 0
         self.index = index + 1
         self.image = load_image('image\\fire_dice.png')
@@ -85,11 +87,11 @@ class Dice:
         self.y = self.position.y
 
     def create(self):
-        self.locate = True
+        self.exist = True
         self.level = 1
 
     def delete(self):
-        self.locate = False
+        self.exist = False
         self.level = 0
 
     def update(self):
@@ -114,7 +116,7 @@ class Dice:
         self.drag = False
 
     def draw(self):
-        if self.locate:
+        if self.exist:
             self.image.draw(self.x, self.y, 95, 95)
             if self.level == 1:
                 self.bullet.draw(self.x + 2, self.y, 95, 95)
