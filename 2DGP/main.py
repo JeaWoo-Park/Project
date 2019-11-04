@@ -19,7 +19,6 @@ def Create_Dice():
             dice[10].exist and \
             dice[11].exist and dice[12].exist and dice[13].exist and dice[14].exist and dice[15].exist:
         return
-        pass
     idx = random.randint(0, 15)
     if dice[idx].exist:
         Create_Dice()

@@ -2,7 +2,7 @@ from pico2d import *
 import object
 
 
-class Dice_Position:
+class DicePosition:
     def __init__(self, idx):
         loop = True
         while loop:
@@ -82,7 +82,7 @@ class Dice:
         self.index = index + 1
         self.image = load_image('image\\fire_dice.png')
         self.bullet = load_image('image\\fire_bullet.png')
-        self.position = Dice_Position(self.index)
+        self.position = DicePosition(self.index)
         self.x = self.position.x
         self.y = self.position.y
         self.timer = 0

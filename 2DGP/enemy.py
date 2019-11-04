@@ -19,17 +19,17 @@ class Enemy:
         self.y = 100
         self.speed = 0.2
         self.hp = 500
-        self.drawing_slow_effect = False
+        self.slow_effect = False
         self.poison = False
 
     def draw(self):
         self.image.draw(self.x, self.y, 110, 110)
-        if self.drawing_slow_effect:
+        if self.slow_effect:
             self.slow_effect.draw(self.x, self.y - 5, 110, 110)
 
     def slow(self):
         self.speed = 0.15
-        self.drawing_slow_effect = True
+        self.slow_effect = True
 
     def die(self):
         object.remove_object(self)
