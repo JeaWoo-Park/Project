@@ -1,5 +1,6 @@
 from pico2d import *
 
+
 class Buy_Button:
     def __init__(self):
         self.image = load_image("image\\buy_button.png")
