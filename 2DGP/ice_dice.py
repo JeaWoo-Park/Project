@@ -15,11 +15,6 @@ class Ice_Dice:
         self.y = self.position.y
         self.timer = 0
 
-    def delete(self):
-
-        self.level = 0
-        self.timer = 0
-
     def update(self):
 
         self.timer = (self.timer + 1) % 1000
@@ -136,7 +131,6 @@ class Ice_Dice:
             bullet = Ice_Bullet(self.x + 15 + 2, self.y)
             object.add_object(bullet, 1)
             pass
-
 
 
 class Ice_Bullet:

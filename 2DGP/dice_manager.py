@@ -82,11 +82,12 @@ class DicePosition:
 class Manager:
     def __init__(self, idx):
         self.exist = False
-        self.type = random.randint(0, 4)
+        self.type = None
         self.index = idx
         self.unit = None
 
     def create(self):
+        self.type = random.randint(0, 4)
         if self.type == 0:
             self.unit = fire_dice.Fire_Dice(self.index)
 
@@ -100,7 +101,7 @@ class Manager:
             self.unit = lock_dice.Lock_Dice(self.index)
 
         elif self.type == 4:
-            unit = poison_dice.Poison_Dice(self.index)
+            self.unit = poison_dice.Poison_Dice(self.index)
 
         self.exist = True
 

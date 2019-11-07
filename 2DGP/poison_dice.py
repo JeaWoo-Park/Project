@@ -15,10 +15,6 @@ class Poison_Dice:
         self.y = self.position.y
         self.timer = 0
 
-    def delete(self):
-        self.level = 0
-        self.timer = 0
-
     def update(self):
 
         self.timer = (self.timer + 1) % 1000

@@ -27,7 +27,11 @@ def Create_Dice():
     dice[idx].create()
 
 
+stack = 1
+
+
 def handle():
+    global stack
     global dice
     global index
     global x
@@ -42,6 +46,8 @@ def handle():
                 buy_button.mouse = False
         if event.type == SDL_MOUSEBUTTONUP:
             print('button UP')
+            stack += 1
+            print(stack)
             if event.button == SDL_BUTTON_LEFT:
                 if 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
                     if dice[0].unit is not None and dice[index].unit is not None:
@@ -49,7 +55,7 @@ def handle():
                                 dice[0].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[0].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -62,7 +68,7 @@ def handle():
                                 dice[1].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[1].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
                         else:
                             dice[index].unit.off_drag()
@@ -74,7 +80,7 @@ def handle():
                                 dice[2].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[2].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
                         else:
                             dice[index].unit.off_drag()
@@ -85,7 +91,7 @@ def handle():
                                 dice[3].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[3].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -97,7 +103,7 @@ def handle():
                                 dice[4].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[4].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -109,7 +115,7 @@ def handle():
                                 dice[5].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[5].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
                         else:
                             dice[index].unit.off_drag()
@@ -120,7 +126,7 @@ def handle():
                                 dice[6].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[6].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -132,7 +138,7 @@ def handle():
                                 dice[7].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[7].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -144,7 +150,7 @@ def handle():
                                 dice[8].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[8].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -156,7 +162,7 @@ def handle():
                                 dice[9].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[9].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -168,7 +174,7 @@ def handle():
                                 dice[10].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[10].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -180,7 +186,7 @@ def handle():
                                 dice[11].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[11].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -192,7 +198,7 @@ def handle():
                                 dice[12].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[12].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -204,7 +210,7 @@ def handle():
                                 dice[13].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[13].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -216,7 +222,7 @@ def handle():
                                 dice[14].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[14].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -228,7 +234,7 @@ def handle():
                                 dice[15].type == dice[index].type:
                             dice[index].unit.off_drag()
                             dice[15].unit.level += 1
-                            dice[index].unit.delete()
+                            dice[index].unit = None
                             dice[index].exist = False
 
                         else:
@@ -253,7 +259,7 @@ def handle():
             if 365 < event.x < 435 and 599 - 157 < event.y < 599 - 96:
                 Create_Dice()
             elif 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
-                if not dice[0].unit is not None:
+                if dice[0].unit is None:
                     break
                 index = 0
 
@@ -261,7 +267,7 @@ def handle():
                 y = dice[0].unit.position.y
                 dice[0].unit.on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[1].unit is not None:
+                if dice[1].unit is None:
                     break
                 index = 1
 
@@ -269,7 +275,7 @@ def handle():
                 y = dice[1].unit.position.y
                 dice[1].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[2].unit is not None:
+                if dice[2].unit is None:
                     break
                 index = 2
 
@@ -277,15 +283,15 @@ def handle():
                 y = dice[2].unit.position.y
                 dice[2].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[3].unit is not None:
+                if dice[3].unit is None:
                     break
                 index = 3
 
                 x = dice[3].unit.position.x
                 y = dice[3].unit.position.y
-                dice[1].unit.on_drag()
+                dice[3].unit.on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[4].unit is not None:
+                if dice[4].unit is None:
                     break
                 index = 4
 
@@ -293,15 +299,15 @@ def handle():
                 y = dice[4].unit.position.y
                 dice[4].unit.on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[5].unit is not None:
+                if dice[5].unit is None:
                     break
-                index = 1
+                index = 5
 
                 x = dice[5].unit.position.x
                 y = dice[5].unit.position.y
                 dice[5].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[6].unit is not None:
+                if dice[6].unit is None:
                     break
                 index = 6
 
@@ -309,24 +315,24 @@ def handle():
                 y = dice[6].unit.position.y
                 dice[6].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[7].unit is not None:
+                if dice[7].unit is None:
                     break
-                index = 1
+                index = 7
 
                 x = dice[7].unit.position.x
                 y = dice[7].unit.position.y
                 dice[7].unit.on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[8].unit is not None:
+                if dice[8].unit is None:
                     break
 
                 index = 8
 
                 x = dice[8].unit.position.x
                 y = dice[8].unit.position.y
-                dice[1].unit.on_drag()
+                dice[8].unit.on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[9].unit is not None:
+                if dice[9].unit is None:
                     break
                 index = 9
 
@@ -334,15 +340,15 @@ def handle():
                 y = dice[9].unit.position.y
                 dice[9].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[10].unit is not None:
+                if dice[10].unit is None:
                     break
-                index = 1
+                index = 10
 
                 x = dice[10].unit.position.x
                 y = dice[10].unit.position.y
                 dice[10].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[11].unit is not None:
+                if dice[11].unit is None:
                     break
                 index = 11
 
@@ -350,7 +356,7 @@ def handle():
                 y = dice[11].unit.position.y
                 dice[11].unit.on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[12].unit is not None:
+                if dice[12].unit is None:
                     break
                 index = 12
 
@@ -359,7 +365,7 @@ def handle():
                 dice[12].unit.on_drag()
 
             elif 363 - 35 < event.x < 363 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[13].unit is not None:
+                if dice[13].unit is None:
                     break
                 index = 13
 
@@ -367,7 +373,7 @@ def handle():
                 y = dice[13].unit.position.y
                 dice[13].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[14].unit is not None:
+                if dice[14].unit is None:
                     break
                 index = 14
 
@@ -375,7 +381,7 @@ def handle():
                 y = dice[14].unit.position.y
                 dice[14].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[15].unit is not None:
+                if dice[15].unit is None:
                     break
                 index = 15
 
@@ -392,6 +398,7 @@ buy_button = Buy_Button()
 background = load_image("image\\background.png")
 dice = [dice_manager.Manager(i) for i in range(16)]
 frame = 0
+
 while running:
     if frame % 350 == 0:
         enemy = Enemy()
@@ -400,10 +407,12 @@ while running:
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
+
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
                 d.unit.draw()
+
     for d in dice:
         if d.unit is not None:
             if d.unit.drag:
@@ -411,7 +420,7 @@ while running:
     for all_object in object.all_objects():
         all_object.draw()
     life.draw()
-    handle()
+
     for all_object in object.all_objects():
         all_object.update()
     buy_button.update()
@@ -419,7 +428,7 @@ while running:
         if d.unit is not None:
             d.unit.update()
     update_canvas()
-
+    handle()
     # delay(0.05)
 
 close_canvas()
