@@ -1,9 +1,10 @@
 from pico2d import *
 import random
-from dice import Dice
+from fire_dice import Fire_Dice
 from buy_button import Buy_Button
 from life import Life
 from enemy import Enemy
+import dice_manager
 
 import object
 
@@ -43,155 +44,201 @@ def handle():
             print('button UP')
             if event.button == SDL_BUTTON_LEFT:
                 if 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
-                    if dice[0].level == dice[index].level and index != 0:
-                        dice[index].off_drag()
-                        dice[0].level += 1
-                        dice[index].delete()
+                    if dice[0].unit is not None and dice[index].unit is not None:
+                        if dice[0].unit.level == dice[index].unit.level and index != 0 and \
+                                dice[0].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[0].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
 
                 elif 363 - 35 < event.x < 363 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-
-                    if dice[1].level == dice[index].level and index != 1:
-                        dice[index].off_drag()
-                        dice[1].level += 1
-                        dice[index].delete()
-
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                    if dice[1].unit is not None and dice[index].unit is not None:
+                        if dice[1].unit.level == dice[index].unit.level and index != 1 and \
+                                dice[1].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[1].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
 
                 elif 436 - 35 < event.x < 436 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-
-                    if dice[2].level == dice[index].level and index != 2:
-                        dice[index].off_drag()
-                        dice[2].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                    if dice[2].unit is not None and dice[index].unit is not None:
+                        if dice[2].unit.level == dice[index].unit.level and index != 2 and \
+                                dice[2].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[2].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 509 - 35 < event.x < 509 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
+                    if dice[3].unit is not None and dice[index].unit is not None:
+                        if dice[3].unit.level == dice[index].unit.level and index != 3 and \
+                                dice[3].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[3].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[3].level == dice[index].level and index != 3:
-                        dice[index].off_drag()
-                        dice[3].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 290 - 35 < event.x < 290 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                    if dice[4].level == dice[index].level and index != 4:
-                        dice[index].off_drag()
-                        dice[4].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                    if dice[4].unit is not None and dice[index].unit is not None:
+                        if dice[4].unit.level == dice[index].unit.level and index != 4 and \
+                                dice[4].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[4].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
+
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 363 - 35 < event.x < 363 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-
-                    if dice[5].level == dice[index].level and index != 5:
-                        dice[index].off_drag()
-                        dice[5].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                    if dice[5].unit is not None and dice[index].unit is not None:
+                        if dice[5].unit.level == dice[index].unit.level and index != 5 and \
+                                dice[5].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[5].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 436 - 35 < event.x < 436 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
+                    if dice[6].unit is not None and dice[index].unit is not None:
+                        if dice[6].unit.level == dice[index].unit.level and index != 6 and \
+                                dice[6].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[6].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[6].level == dice[index].level and index != 6:
-                        dice[index].off_drag()
-                        dice[6].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 509 - 35 < event.x < 509 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
+                    if dice[7].unit is not None and dice[index].unit is not None:
+                        if dice[7].unit.level == dice[index].unit.level and index != 7 and \
+                                dice[7].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[7].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[7].level == dice[index].level and index != 7:
-                        dice[index].off_drag()
-                        dice[7].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 290 - 35 < event.x < 290 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                    if dice[8].unit is not None and dice[index].unit is not None:
+                        if dice[8].unit.level == dice[index].unit.level and index != 8 and \
+                                dice[8].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[8].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[8].level == dice[index].level and index != 8:
-                        dice[index].off_drag()
-                        dice[8].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 363 - 35 < event.x < 363 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                    if dice[9].unit is not None and dice[index].unit is not None:
+                        if dice[9].unit.level == dice[index].unit.level and index != 9 and \
+                                dice[9].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[9].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[9].level == dice[index].level and index != 9:
-                        dice[index].off_drag()
-                        dice[9].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 436 - 35 < event.x < 436 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                    if dice[10].unit is not None and dice[index].unit is not None:
+                        if dice[10].unit.level == dice[index].unit.level and index != 10 and \
+                                dice[10].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[10].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[10].level == dice[index].level and index != 10:
-                        dice[index].off_drag()
-                        dice[10].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 509 - 35 < event.x < 509 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
+                    if dice[11].unit is not None and dice[index].unit is not None:
+                        if dice[11].unit.level == dice[index].unit.level and index != 11 and \
+                                dice[11].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[11].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[11].level == dice[index].level and index != 11:
-                        dice[index].off_drag()
-                        dice[11].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 290 - 35 < event.x < 290 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                    if dice[12].unit is not None and dice[index].unit is not None:
+                        if dice[12].unit.level == dice[index].unit.level and index != 12 and \
+                                dice[12].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[12].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[12].level == dice[index].level and index != 12:
-                        dice[index].off_drag()
-                        dice[12].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 363 - 35 < event.x < 363 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                    if dice[13].unit is not None and dice[index].unit is not None:
+                        if dice[13].unit.level == dice[index].unit.level and index != 13 and \
+                                dice[13].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[13].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[13].level == dice[index].level and index != 13:
-                        dice[index].off_drag()
-                        dice[13].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 436 - 35 < event.x < 436 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                    if dice[14].unit is not None and dice[index].unit is not None:
+                        if dice[14].unit.level == dice[index].unit.level and index != 14 and \
+                                dice[14].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[14].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[14].level == dice[index].level and index != 14:
-                        dice[index].off_drag()
-                        dice[14].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 elif 509 - 35 < event.x < 509 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
+                    if dice[15].unit is not None and dice[index].unit is not None:
+                        if dice[15].unit.level == dice[index].unit.level and index != 15 and \
+                                dice[15].type == dice[index].type:
+                            dice[index].unit.off_drag()
+                            dice[15].unit.level += 1
+                            dice[index].unit.delete()
+                            dice[index].exist = False
 
-                    if dice[15].level == dice[index].level and index != 15:
-                        dice[index].off_drag()
-                        dice[15].level += 1
-                        dice[index].delete()
-                    else:
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        else:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
                 else:
                     for index in range(16):
-                        dice[index].off_drag()
-                        dice[index].go_back()
+                        if dice[index].unit is not None:
+                            dice[index].unit.off_drag()
+                            dice[index].unit.go_back()
 
         elif event.type == SDL_QUIT:
             running = False
@@ -200,141 +247,141 @@ def handle():
         elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
 
             for i in range(16):
-                dice[i].off_drag()
+                if dice[i].unit is not None:
+                    dice[i].unit.off_drag()
 
             if 365 < event.x < 435 and 599 - 157 < event.y < 599 - 96:
                 Create_Dice()
             elif 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
-                if not dice[0].exist:
+                if not dice[0].unit is not None:
                     break
                 index = 0
 
-                x = dice[0].position.x
-                y = dice[0].position.y
-                dice[0].on_drag()
+                x = dice[0].unit.position.x
+                y = dice[0].unit.position.y
+                dice[0].unit.on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[1].exist:
+                if not dice[1].unit is not None:
                     break
                 index = 1
 
-                x = dice[1].position.x
-                y = dice[1].position.y
-                dice[1].on_drag()
+                x = dice[1].unit.position.x
+                y = dice[1].unit.position.y
+                dice[1].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[2].exist:
+                if not dice[2].unit is not None:
                     break
                 index = 2
 
-                x = dice[2].position.x
-                y = dice[2].position.y
-                dice[2].on_drag()
+                x = dice[2].unit.position.x
+                y = dice[2].unit.position.y
+                dice[2].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 417 - 35 < event.y < 599 - 417 + 34:
-                if not dice[3].exist:
+                if not dice[3].unit is not None:
                     break
                 index = 3
 
-                x = dice[3].position.x
-                y = dice[3].position.y
-                dice[3].on_drag()
+                x = dice[3].unit.position.x
+                y = dice[3].unit.position.y
+                dice[1].unit.on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[4].exist:
+                if not dice[4].unit is not None:
                     break
                 index = 4
 
-                x = dice[4].position.x
-                y = dice[4].position.y
-                dice[4].on_drag()
+                x = dice[4].unit.position.x
+                y = dice[4].unit.position.y
+                dice[4].unit.on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[5].exist:
+                if not dice[5].unit is not None:
                     break
-                index = 5
+                index = 1
 
-                x = dice[5].position.x
-                y = dice[5].position.y
-                dice[5].on_drag()
+                x = dice[5].unit.position.x
+                y = dice[5].unit.position.y
+                dice[5].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[6].exist:
+                if not dice[6].unit is not None:
                     break
                 index = 6
 
-                x = dice[6].position.x
-                y = dice[6].position.y
-                dice[6].on_drag()
+                x = dice[6].unit.position.x
+                y = dice[6].unit.position.y
+                dice[6].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 344 - 35 < event.y < 599 - 344 + 34:
-                if not dice[7].exist:
+                if not dice[7].unit is not None:
                     break
-                index = 7
+                index = 1
 
-                x = dice[7].position.x
-                y = dice[7].position.y
-                dice[7].on_drag()
+                x = dice[7].unit.position.x
+                y = dice[7].unit.position.y
+                dice[7].unit.on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[8].exist:
+                if not dice[8].unit is not None:
                     break
+
                 index = 8
 
-                x = dice[8].position.x
-                y = dice[8].position.y
-                dice[8].on_drag()
+                x = dice[8].unit.position.x
+                y = dice[8].unit.position.y
+                dice[1].unit.on_drag()
             elif 363 - 35 < event.x < 363 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[9].exist:
+                if not dice[9].unit is not None:
                     break
                 index = 9
 
-                x = dice[9].position.x
-                y = dice[9].position.y
-                dice[9].on_drag()
+                x = dice[9].unit.position.x
+                y = dice[9].unit.position.y
+                dice[9].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[10].exist:
+                if not dice[10].unit is not None:
                     break
-                index = 10
+                index = 1
 
-                x = dice[10].position.x
-                y = dice[10].position.y
-                dice[10].on_drag()
+                x = dice[10].unit.position.x
+                y = dice[10].unit.position.y
+                dice[10].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 273 - 35 < event.y < 599 - 273 + 34:
-                if not dice[11].exist:
+                if not dice[11].unit is not None:
                     break
                 index = 11
 
-                x = dice[11].position.x
-                y = dice[11].position.y
-                dice[11].on_drag()
+                x = dice[11].unit.position.x
+                y = dice[11].unit.position.y
+                dice[11].unit.on_drag()
             elif 290 - 35 < event.x < 290 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[12].exist:
+                if not dice[12].unit is not None:
                     break
                 index = 12
 
-                x = dice[12].position.x
-                y = dice[12].position.y
-                dice[12].on_drag()
+                x = dice[12].unit.position.x
+                y = dice[12].unit.position.y
+                dice[12].unit.on_drag()
 
             elif 363 - 35 < event.x < 363 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[13].exist:
+                if not dice[13].unit is not None:
                     break
                 index = 13
 
-                x = dice[13].position.x
-                y = dice[13].position.y
-                dice[13].on_drag()
-
+                x = dice[13].unit.position.x
+                y = dice[13].unit.position.y
+                dice[13].unit.on_drag()
             elif 436 - 35 < event.x < 436 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[14].exist:
+                if not dice[14].unit is not None:
                     break
                 index = 14
 
-                x = dice[14].position.x
-                y = dice[14].position.y
-                dice[14].on_drag()
-
+                x = dice[14].unit.position.x
+                y = dice[14].unit.position.y
+                dice[14].unit.on_drag()
             elif 509 - 35 < event.x < 509 + 34 and 599 - 200 - 35 < event.y < 599 - 200 + 34:
-                if not dice[15].exist:
+                if not dice[15].unit is not None:
                     break
                 index = 15
 
-                x = dice[15].position.x
-                y = dice[15].position.y
-                dice[15].on_drag()
+                x = dice[15].unit.position.x
+                y = dice[15].unit.position.y
+                dice[15].unit.on_drag()
 
 
 running = True
@@ -343,7 +390,7 @@ open_canvas(800, 600)
 life = Life()
 buy_button = Buy_Button()
 background = load_image("image\\background.png")
-dice = [Dice(i) for i in range(16)]
+dice = [dice_manager.Manager(i) for i in range(16)]
 frame = 0
 while running:
     if frame % 350 == 0:
@@ -354,11 +401,13 @@ while running:
     background.draw(400, 300)
     buy_button.draw()
     for d in dice:
-        if not d.drag:
-            d.draw()
+        if d.unit is not None:
+            if not d.unit.drag:
+                d.unit.draw()
     for d in dice:
-        if d.drag:
-            d.draw()
+        if d.unit is not None:
+            if d.unit.drag:
+                d.unit.draw()
     for all_object in object.all_objects():
         all_object.draw()
     life.draw()
@@ -367,7 +416,8 @@ while running:
         all_object.update()
     buy_button.update()
     for d in dice:
-        d.update()
+        if d.unit is not None:
+            d.unit.update()
     update_canvas()
 
     # delay(0.05)
