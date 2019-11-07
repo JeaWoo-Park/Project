@@ -139,13 +139,24 @@ class Ice_Bullet:
         self.image = load_image("image\\ice_bullet.png")
         self.timer = 0
         self.speed = 0
+        self.target = object.bring_object(0, 0)
+        if self.target.x == 124 and self.target.y < 514:
+            self.target_x = self.target.x
+            self.target_y = self.target.y + 20
+        elif self.target.y == 514 and self.target.x < 674:
+            self.target_x = self.target.x + 20
+            self.target_y = self.target.y
+        elif self.target.x == 674 and self.target.y > 100:
+            self.target_x = self.target.x
+            self.target_y = self.target.y - 20
+
         self.x = x
         self.y = y
 
-    def fire(self, target):
+    def fire(self):
         t = self.speed / 100
-        self.x = (1 - t) * self.x + t * target.x
-        self.y = (1 - t) * self.y + t * target.y
+        self.x = (1 - t) * self.x + t * self.target_x
+        self.y = (1 - t) * self.y + t * self.target_y
         self.image.draw(self.x, self.y, 95, 95)
 
     def draw(self):
@@ -153,11 +164,11 @@ class Ice_Bullet:
 
     def update(self):
         self.timer = (self.timer + 1) % 1000
-
-        if self.timer % 20 == 0:
+        if self.timer % 6 == 0:
             self.speed += 1
-            self.fire(object.bring_object(0, 0))
-        if object.bring_object(0, 0).x - 30 < self.x < object.bring_object(0, 0).x + 30 and \
-                object.bring_object(0, 0).y - 30 < self.y < object.bring_object(0, 0).y + 30:
+            self.fire()
+        if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
             object.bring_object(0, 0).hp -= 100
+        if self.target.hp < 1:
+            object.remove_object(self)
