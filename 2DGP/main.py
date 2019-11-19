@@ -397,10 +397,12 @@ life = Life()
 buy_button = Buy_Button()
 background = load_image("image\\background.png")
 dice = [dice_manager.Manager(i) for i in range(16)]
-frame = 0
+frame = 1
+spawn_rate = 1400
 
 while running:
-    if frame % 350 == 0:
+    if frame % spawn_rate == 0:
+        spawn_rate = 350
         enemy = Enemy()
         object.add_object(enemy, 0)
     frame += 1

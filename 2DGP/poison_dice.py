@@ -18,7 +18,7 @@ class Poison_Dice:
     def update(self):
 
         self.timer = (self.timer + 1) % 1000
-        if self.timer == 0:
+        if self.timer == 0 and len(object.objects[0]) != 0:
             self.attack()
         if self.drag:
             i = get_events()

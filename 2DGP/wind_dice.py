@@ -17,9 +17,9 @@ class Wind_Dice:
 
     def update(self):
 
-        self.timer = (self.timer + 1) % 1000
-        if self.timer == 0:
-            self.attack(self, object.bring_object(0, 0))
+        self.timer = (self.timer + 1) % 700
+        if self.timer == 0 and len(object.objects[0]) != 0:
+            self.attack()
         if self.drag:
             i = get_events()
             for event in i:
@@ -75,7 +75,7 @@ class Wind_Dice:
             self.bullet.draw(self.x + 15 + 2, self.y, 95, 95)
             self.bullet.draw(self.x - 15 + 2, self.y, 95, 95)
 
-    def attack(self, dice, target):
+    def attack(self):
         if self.level == 1:
             bullet = Wind_Bullet(self.x + 2, self.y)
             object.add_object(bullet, 1)
