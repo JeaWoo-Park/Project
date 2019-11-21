@@ -31,7 +31,7 @@ def Create_Dice():
 stack = 1
 life = None
 buy_button = None
-backgraound = None
+background = None
 dice = None
 frame = 1
 spawn_rate = 1400
@@ -422,6 +422,7 @@ def handle_events():
 def update():
     global frame
     global spawn_rate
+
     if frame % spawn_rate == 0:
         spawn_rate = 350
         enemy = Enemy()
@@ -436,7 +437,6 @@ def update():
 
 
 def draw():
-    global dice
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
