@@ -5,6 +5,7 @@ from buy_button import Buy_Button
 from life import Life
 from enemy import Enemy
 import dice_manager
+import game_framework
 
 import object
 
@@ -28,9 +29,37 @@ def Create_Dice():
 
 
 stack = 1
+life = None
+buy_button = None
+backgraound = None
+dice = None
+frame = 1
+spawn_rate = 1400
 
 
-def handle():
+def enter():
+    global life, buy_button, background, dice, frame, spawn_rate
+    life = Life()
+    buy_button = Buy_Button()
+    background = load_image("image\\background.png")
+    dice = [dice_manager.Manager(i) for i in range(16)]
+    frame = 1
+    spawn_rate = 1400
+
+
+def exit():
+    object.clear()
+
+
+def pause():
+    pass
+
+
+def resume():
+    pass
+
+
+def handle_events():
     global stack
     global dice
     global index
@@ -247,9 +276,9 @@ def handle():
                             dice[index].unit.go_back()
 
         elif event.type == SDL_QUIT:
-            running = False
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
+            game_framework.quit()
         elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
 
             for i in range(16):
@@ -390,26 +419,27 @@ def handle():
                 dice[15].unit.on_drag()
 
 
-running = True
-
-open_canvas(800, 600)
-life = Life()
-buy_button = Buy_Button()
-background = load_image("image\\background.png")
-dice = [dice_manager.Manager(i) for i in range(16)]
-frame = 1
-spawn_rate = 1400
-
-while running:
+def update():
+    global frame
+    global spawn_rate
     if frame % spawn_rate == 0:
         spawn_rate = 350
         enemy = Enemy()
         object.add_object(enemy, 0)
     frame += 1
+    for all_object in object.all_objects():
+        all_object.update()
+    buy_button.update()
+    for d in dice:
+        if d.unit is not None:
+            d.unit.update()
+
+
+def draw():
+    global dice
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
-
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
@@ -422,15 +452,4 @@ while running:
     for all_object in object.all_objects():
         all_object.draw()
     life.draw()
-
-    for all_object in object.all_objects():
-        all_object.update()
-    buy_button.update()
-    for d in dice:
-        if d.unit is not None:
-            d.unit.update()
     update_canvas()
-    handle()
-    # delay(0.05)
-
-close_canvas()
