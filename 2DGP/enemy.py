@@ -63,8 +63,8 @@ class Enemy:
 
         if self.x == 674 and self.y < 100:
             object.remove_object(self)
-            life.life_amount -= 1
-            if life.life_amount == 0:
+            life.Life.life_amount -= 1
+            if life.Life.life_amount == 0:
                 game_framework.change_state(lose_state)
         if self.hp < 1:
             self.die()

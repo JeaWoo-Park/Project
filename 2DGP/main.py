@@ -6,6 +6,7 @@ from life import Life
 from enemy import Enemy
 import dice_manager
 import game_framework
+import sp_point
 
 import object
 
@@ -35,10 +36,11 @@ background = None
 dice = None
 frame = 1
 spawn_rate = 1400
-
+sp_font = None
 
 def enter():
-    global life, buy_button, background, dice, frame, spawn_rate
+    global life, buy_button, background, dice, frame, spawn_rate, sp_font
+    sp_font = load_font("font\\Cookie.otf", 11)
     life = Life()
     buy_button = Buy_Button()
     background = load_image("image\\background.png")
@@ -440,6 +442,7 @@ def draw():
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
+    sp_font.draw(400, 105, '%d' % sp_point.SP.sp_point, (255, 255, 255))
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
