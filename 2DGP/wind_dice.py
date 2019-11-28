@@ -17,7 +17,7 @@ class Wind_Dice:
 
     def update(self):
 
-        self.timer = (self.timer + 1) % 700
+        self.timer = (self.timer + 1) % 200
         if self.timer == 0 and len(object.objects[0]) != 0:
             self.attack()
         if self.drag:
