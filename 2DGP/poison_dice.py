@@ -1,6 +1,7 @@
 from pico2d import *
 import object
 import dice_manager
+import random
 
 
 class Poison_Dice:
@@ -17,7 +18,7 @@ class Poison_Dice:
 
     def update(self):
 
-        self.timer = (self.timer + 1) % 1000
+        self.timer = (self.timer + 1) % 600
         if self.timer == 0 and len(object.objects[0]) != 0:
             self.attack()
         if self.drag:
@@ -140,7 +141,7 @@ class Poison_Bullet:
         self.image = load_image("image\\poison_bullet.png")
         self.timer = 0
         self.speed = 0
-        self.target = object.bring_object(0, 0)
+        self.target = object.bring_object(0, random.randint(0, len(object.objects[0]) - 1))
         if self.target.x == 124 and self.target.y < 514:
             self.target_x = self.target.x
             self.target_y = self.target.y + 20
@@ -170,9 +171,9 @@ class Poison_Bullet:
             self.fire()
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
-            object.bring_object(0, 0).hp -= 100
-            if not object.bring_object(0, 0).drawing_poison_effect:
-                object.bring_object(0, 0).poison(100)
+            self.target.hp -= 50
+            if not self.target.drawing_poison_effect:
+                self.target.poison(50)
         if self.target.hp < 1:
             object.remove_object(self)
 
