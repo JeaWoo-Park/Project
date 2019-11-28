@@ -61,7 +61,7 @@ class Enemy:
             self.hp -= self.poison_damage
         self.poison_damage_rate += 1
         self.lock_timer += 1
-        if (self.lock_timer % 2500) == 0:
+        if (self.lock_timer % 1000) == 0:
             if self.locking:
                 self.unlock()
         if self.y > 514:
