@@ -23,6 +23,8 @@ class Enemy:
         self.hp = 500
         self.poison_damage_rate = 0
         self.poison_damage = 0
+        self.lock_timer = 0
+        self.locking = False
         self.drawing_slow_effect = False
         self.drawing_poison_effect = False
 
@@ -42,6 +44,15 @@ class Enemy:
         self.speed = 0.15
         self.drawing_slow_effect = True
 
+    def lock(self):
+        self.speed = 0
+        self.locking = True
+        self.lock_timer = 0
+
+    def unlock(self):
+        self.speed = 0.2
+        self.locking = False
+
     def die(self):
         object.remove_object(self)
 
@@ -49,6 +60,10 @@ class Enemy:
         if (self.poison_damage_rate % 300) == 0:
             self.hp -= self.poison_damage
         self.poison_damage_rate += 1
+        self.lock_timer += 1
+        if (self.lock_timer % 2500) == 0:
+            if self.locking:
+                self.unlock()
         if self.y > 514:
             self.y = 514
         if self.x > 674:

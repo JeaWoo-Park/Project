@@ -1,5 +1,6 @@
 from pico2d import *
 import object
+import random
 import dice_manager
 
 
@@ -14,6 +15,7 @@ class Lock_Dice:
         self.x = self.position.x
         self.y = self.position.y
         self.timer = 0
+
 
     def update(self):
         self.timer = (self.timer + 1) % 1000
@@ -137,6 +139,8 @@ class Lock_Bullet:
         self.timer = 0
         self.speed = 0
         self.target = object.bring_object(0, 0)
+        if self.target.locking:
+            self.target = object.bring_object(0, 1)
         if self.target.x == 124 and self.target.y < 514:
             self.target_x = self.target.x
             self.target_y = self.target.y + 20
@@ -146,7 +150,7 @@ class Lock_Bullet:
         elif self.target.x == 674 and self.target.y > 100:
             self.target_x = self.target.x
             self.target_y = self.target.y - 20
-
+        self.lock_chance = 0
         self.x = x
         self.y = y
 
@@ -166,6 +170,9 @@ class Lock_Bullet:
             self.fire()
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
-            object.bring_object(0, 0).hp -= 100
+            self.target.hp -= 100
+            self.lock_chance = random.randint(0, 2)
+            if self.lock_chance == 1:
+                self.target.lock()
         if self.target.hp < 1:
             object.remove_object(self)

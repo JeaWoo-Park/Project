@@ -138,6 +138,8 @@ class Wind_Bullet:
         self.timer = 0
         self.speed = 0
         self.target = object.bring_object(0, 0)
+        if self.target.locking:
+            self.target = object.bring_object(0, 1)
         if self.target.x == 124 and self.target.y < 514:
             self.target_x = self.target.x
             self.target_y = self.target.y + 20
@@ -167,7 +169,7 @@ class Wind_Bullet:
             self.fire()
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
-            object.bring_object(0, 0).hp -= 100
+            self.target.hp -= 100
         if self.target.hp < 1:
             object.remove_object(self)
 
