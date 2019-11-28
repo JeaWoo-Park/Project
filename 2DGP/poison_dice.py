@@ -171,6 +171,8 @@ class Poison_Bullet:
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
             object.bring_object(0, 0).hp -= 100
+            if not object.bring_object(0, 0).drawing_poison_effect:
+                object.bring_object(0, 0).poison(100)
         if self.target.hp < 1:
             object.remove_object(self)
 

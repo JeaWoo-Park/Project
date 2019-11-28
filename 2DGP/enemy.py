@@ -47,8 +47,7 @@ class Enemy:
 
     def update(self):
         if (self.poison_damage_rate % 300) == 0:
-            self.hp - self.poison_damage
-
+            self.hp -= self.poison_damage
         self.poison_damage_rate += 1
         if self.y > 514:
             self.y = 514

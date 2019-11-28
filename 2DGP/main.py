@@ -37,9 +37,11 @@ dice = None
 frame = 1
 spawn_rate = 1400
 sp_font = None
+sp = None
 
 def enter():
-    global life, buy_button, background, dice, frame, spawn_rate, sp_font
+    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp
+    sp = sp_point.SP()
     sp_font = load_font("font\\Cookie.otf", 11)
     life = Life()
     buy_button = Buy_Button()
@@ -439,10 +441,11 @@ def update():
 
 
 def draw():
+    global sp
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
-    sp_font.draw(400, 105, '%d' % sp_point.SP.sp_point, (255, 255, 255))
+    sp_font.draw(400, 105, '%d' % sp.point, (255, 255, 255))
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
