@@ -26,7 +26,12 @@ def Create_Dice():
     if dice[idx].exist:
         Create_Dice()
         return
-    dice[idx].create()
+    if object.bring_object(2, 0).need_point <= object.bring_object(2, 0).point:
+        dice[idx].create()
+        object.bring_object(2, 0).point -= object.bring_object(2, 0).need_point
+        object.bring_object(2, 0).need_point += 10
+    else:
+        return
 
 
 stack = 1
@@ -446,7 +451,7 @@ def draw():
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
-    sp_font.draw(400, 105, '%d' % sp.point, (255, 255, 255))
+    sp_font.draw(200, 105, '%d' % sp.point, (255, 255, 255))
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
