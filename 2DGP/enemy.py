@@ -55,6 +55,8 @@ class Enemy:
 
     def die(self):
         object.remove_object(self)
+        object.bring_object(2, 0).point += 10
+
 
     def update(self):
         if (self.poison_damage_rate % 300) == 0:

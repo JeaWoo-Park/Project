@@ -42,6 +42,7 @@ sp = None
 def enter():
     global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp
     sp = sp_point.SP()
+    object.add_object(sp, 2)
     sp_font = load_font("font\\Cookie.otf", 11)
     life = Life()
     buy_button = Buy_Button()

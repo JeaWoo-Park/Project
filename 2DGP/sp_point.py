@@ -6,3 +6,8 @@ class SP:
         self.point = 100
         self.needed_point = 10
 
+    def draw(self):
+        pass
+
+    def update(self):
+        pass
