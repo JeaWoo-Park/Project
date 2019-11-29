@@ -43,7 +43,7 @@ frame = 1
 spawn_rate = 1400
 sp_font = None
 boss_timer_font = None
-boss_timer = 100
+boss_timer = 0
 boss_round = False
 sp = None
 
@@ -471,9 +471,9 @@ def draw():
 
     if not boss_round:
         boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
-        boss_timer = 101
+        boss_timer = 100
     else:
-        boss_timer_font.draw(345, 585, '!!!BOSS!!!', (255, 0, 0))
+        boss_timer_font.draw(350, 585, '!!!BOSS!!!', (255, 0, 0))
 
 
     for d in dice:
