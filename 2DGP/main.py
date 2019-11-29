@@ -475,7 +475,6 @@ def draw():
     else:
         boss_timer_font.draw(350, 585, '!!!BOSS!!!', (255, 0, 0))
 
-
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
