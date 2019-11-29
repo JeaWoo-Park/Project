@@ -44,6 +44,7 @@ spawn_rate = 1400
 sp_font = None
 boss_timer_font = None
 boss_timer = 100
+boss_round = False
 sp = None
 
 
@@ -437,13 +438,19 @@ def update():
     global frame
     global spawn_rate
     global boss_timer
+    global boss_round
 
-    boss_timer -= int(get_time())
-    if frame % spawn_rate == 0:
-        frame = 1
-        spawn_rate = 400
-        enemy = Enemy()
-        object.add_object(enemy, 0)
+    if boss_timer - get_time() > 0:
+        boss_timer -= get_time()
+
+    else:
+        boss_round = True
+    if not boss_round:
+        if frame % spawn_rate == 0:
+            frame = 1
+            spawn_rate = 400
+            enemy = Enemy()
+            object.add_object(enemy, 0)
     frame += 1
     for all_object in object.all_objects():
         all_object.update()
@@ -461,11 +468,14 @@ def draw():
     buy_button.draw()
     sp_font.draw(200, 105, '%d' % sp.point, (255, 255, 255))
     sp_font.draw(400, 105, '%d' % sp.need_point, (255, 255, 255))
-    if boss_timer > 0:
+
+    if not boss_round:
         boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
         boss_timer = 101
     else:
-        boss_timer_font.draw(390, 585, 'BOSS!!!', (255, 0, 0))
+        boss_timer_font.draw(345, 585, '!!!BOSS!!!', (255, 0, 0))
+
+
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
