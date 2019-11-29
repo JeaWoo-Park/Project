@@ -42,13 +42,17 @@ dice = None
 frame = 1
 spawn_rate = 1400
 sp_font = None
+boss_timer_font = None
+boss_timer = 100
 sp = None
 
+
 def enter():
-    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp
+    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font
     sp = sp_point.SP()
     object.add_object(sp, 2)
     sp_font = load_font("font\\Cookie.otf", 11)
+    boss_timer_font = load_font("font\\Cookie.otf", 24)
     life = Life()
     buy_button = Buy_Button()
     background = load_image("image\\background.png")
@@ -432,9 +436,12 @@ def handle_events():
 def update():
     global frame
     global spawn_rate
+    global boss_timer
 
+    boss_timer -= int(get_time())
     if frame % spawn_rate == 0:
-        spawn_rate = 350
+        frame = 1
+        spawn_rate = 400
         enemy = Enemy()
         object.add_object(enemy, 0)
     frame += 1
@@ -448,11 +455,17 @@ def update():
 
 def draw():
     global sp
+    global boss_timer
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
     sp_font.draw(200, 105, '%d' % sp.point, (255, 255, 255))
     sp_font.draw(400, 105, '%d' % sp.need_point, (255, 255, 255))
+    if boss_timer > 0:
+        boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
+        boss_timer = 101
+    else:
+        boss_timer_font.draw(390, 585, 'BOSS!!!', (255, 0, 0))
     for d in dice:
         if d.unit is not None:
             if not d.unit.drag:
