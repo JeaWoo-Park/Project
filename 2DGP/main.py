@@ -4,6 +4,7 @@ from fire_dice import Fire_Dice
 from buy_button import Buy_Button
 from life import Life
 from enemy import Enemy
+from enemy import Boss
 import dice_manager
 import game_framework
 import sp_point
@@ -43,7 +44,7 @@ frame = 1
 spawn_rate = 1400
 sp_font = None
 boss_timer_font = None
-boss_timer = 0
+boss_timer = 100
 boss_round = False
 sp = None
 
@@ -451,6 +452,9 @@ def update():
             spawn_rate = 400
             enemy = Enemy()
             object.add_object(enemy, 0)
+    elif boss_round and len(object.objects[0]) == 0:
+        enemy = Boss()
+        object.add_object(enemy, 0)
     frame += 1
     for all_object in object.all_objects():
         all_object.update()
