@@ -41,7 +41,7 @@ buy_button = None
 background = None
 dice = None
 frame = 1
-spawn_rate = 1400
+spawn_rate = 200
 sp_font = None
 boss_timer_font = None
 boss_timer = 100
@@ -60,7 +60,7 @@ def enter():
     background = load_image("image\\background.png")
     dice = [dice_manager.Manager(i) for i in range(16)]
     frame = 1
-    spawn_rate = 1400
+    spawn_rate = 300
 
 
 def exit():
@@ -449,7 +449,7 @@ def update():
     if not boss_round:
         if frame % spawn_rate == 0:
             frame = 1
-            spawn_rate = 400
+            spawn_rate = 120
             enemy = Enemy()
             object.add_object(enemy, 0)
     elif boss_round and len(object.objects[0]) == 0:

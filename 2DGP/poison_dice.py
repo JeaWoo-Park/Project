@@ -15,10 +15,11 @@ class Poison_Dice:
         self.x = self.position.x
         self.y = self.position.y
         self.timer = 0
+        self.attack_speed = 600
 
     def update(self):
 
-        self.timer = (self.timer + 1) % 600
+        self.timer = (self.timer + 1) % self.attack_speed
         if self.timer == 0 and len(object.objects[0]) != 0:
             self.attack()
         if self.drag:
@@ -139,8 +140,9 @@ class Poison_Bullet:
 
     def __init__(self, x, y):
         self.image = load_image("image\\poison_bullet.png")
-        self.timer = 0
-        self.speed = 0
+        self.attack_power = 10
+        self.poison_damage = 15
+        self.frame = 0
         self.target = object.bring_object(0, random.randint(0, len(object.objects[0]) - 1))
         if self.target.x == 124 and self.target.y < 514:
             self.target_x = self.target.x
@@ -156,7 +158,7 @@ class Poison_Bullet:
         self.y = y
 
     def fire(self):
-        t = self.speed / 100
+        t = self.frame / 100
         self.x = (1 - t) * self.x + t * self.target_x
         self.y = (1 - t) * self.y + t * self.target_y
         self.image.draw(self.x, self.y, 95, 95)
@@ -165,15 +167,13 @@ class Poison_Bullet:
         self.image.draw(self.x, self.y, 95, 95)
 
     def update(self):
-        self.timer = (self.timer + 1) % 1000
-        if self.timer % 6 == 0:
-            self.speed += 1
-            self.fire()
+        self.frame += 1
+        self.fire()
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
-            self.target.hp -= 50
+            self.target.hp -= self.attack_power
             if not self.target.drawing_poison_effect:
-                self.target.poison(50)
+                self.target.poison(self.poison_damage)
         if self.target.hp < 1:
             object.remove_object(self)
 

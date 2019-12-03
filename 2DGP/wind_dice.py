@@ -14,10 +14,11 @@ class Wind_Dice:
         self.x = self.position.x
         self.y = self.position.y
         self.timer = 0
+        self.attack_speed = 30
 
     def update(self):
 
-        self.timer = (self.timer + 1) % 200
+        self.timer = (self.timer + 1) % self.attack_speed
         if self.timer == 0 and len(object.objects[0]) != 0:
             self.attack()
         if self.drag:
@@ -135,8 +136,8 @@ class Wind_Dice:
 class Wind_Bullet:
     def __init__(self, x, y):
         self.image = load_image("image\\wind_bullet.png")
-        self.timer = 0
-        self.speed = 0
+        self.attack_power = 15
+        self.frame = 0
         self.target = object.bring_object(0, 0)
         if self.target.locking:
             self.target = object.bring_object(0, 1)
@@ -154,7 +155,7 @@ class Wind_Bullet:
         self.y = y
 
     def fire(self):
-        t = self.speed / 100
+        t = self.frame / 100
         self.x = (1 - t) * self.x + t * self.target_x
         self.y = (1 - t) * self.y + t * self.target_y
         self.image.draw(self.x, self.y, 95, 95)
@@ -163,13 +164,11 @@ class Wind_Bullet:
         self.image.draw(self.x, self.y, 95, 95)
 
     def update(self):
-        self.timer = (self.timer + 1) % 1000
-        if self.timer % 6 == 0:
-            self.speed += 1
-            self.fire()
+        self.frame += 1
+        self.fire()
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
-            self.target.hp -= 100
+            self.target.hp -= self.attack_power
         if self.target.hp < 1:
             object.remove_object(self)
 

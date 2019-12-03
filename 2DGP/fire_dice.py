@@ -8,6 +8,7 @@ class Fire_Dice:
         self.drag = False
         self.level = 1
         self.index = index + 1
+        self.attack_speed = 90
         self.image = load_image('image\\fire_dice.png')
         self.bullet = load_image('image\\fire_bullet.png')
         self.position = dice_manager.DicePosition(self.index)
@@ -17,7 +18,7 @@ class Fire_Dice:
 
     def update(self):
 
-        self.timer = (self.timer + 1) % 1000
+        self.timer = (self.timer + 1) % self.attack_speed
         if self.timer == 0 and len(object.objects[0]) != 0:
             self.attack()
         if self.drag:
@@ -138,8 +139,8 @@ class Fire_Bullet:
 
     def __init__(self, x, y):
         self.image = load_image("image\\fire_bullet.png")
-        self.timer = 0
-        self.speed = 0
+        self.attack_power = 40
+        self.frame = 0
         self.target = object.bring_object(0, 0)
         if self.target.locking:
             self.target = object.bring_object(0, 1)
@@ -157,7 +158,7 @@ class Fire_Bullet:
         self.y = y
 
     def fire(self):
-        t = self.speed / 100
+        t = self.frame / 100
         self.x = (1 - t) * self.x + t * self.target_x
         self.y = (1 - t) * self.y + t * self.target_y
         self.image.draw(self.x, self.y, 95, 95)
@@ -166,12 +167,10 @@ class Fire_Bullet:
         self.image.draw(self.x, self.y, 95, 95)
 
     def update(self):
-        self.timer = (self.timer + 1) % 1000
-        if self.timer % 6 == 0:
-            self.speed += 1
-            self.fire()
+        self.frame += 1
+        self.fire()
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
-            self.target.hp -= 100
+            self.target.hp -= self.attack_power
         if self.target.hp < 1:
             object.remove_object(self)

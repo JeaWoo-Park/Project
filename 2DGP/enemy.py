@@ -23,7 +23,7 @@ class Enemy:
             Enemy.slow_effect = load_image("image\\slow_enemy.png")
         self.x = 124
         self.y = 100
-        self.speed = 0.2
+        self.speed = 30
         self.hp = 500
         self.poison_damage_rate = 0
         self.poison_damage = 0
@@ -46,7 +46,7 @@ class Enemy:
         self.drawing_poison_effect = True
 
     def slow(self):
-        self.speed = 0.12
+        self.speed = 25
         self.drawing_slow_effect = True
 
     def lock(self):
@@ -63,11 +63,11 @@ class Enemy:
         object.bring_object(2, 0).point += 10
 
     def update(self):
-        if (self.poison_damage_rate % 300) == 0:
+        if (self.poison_damage_rate % 600) == 0:
             self.hp -= self.poison_damage
         self.poison_damage_rate += 1
         self.lock_timer += 1
-        if (self.lock_timer % 1000) == 0:
+        if (self.lock_timer % 180) == 0:
             if self.locking:
                 self.unlock()
         if self.y > 514:
@@ -75,11 +75,11 @@ class Enemy:
         if self.x > 674:
             self.x = 674
         if self.x == 124 and self.y < 514:
-            self.y += self.speed
+            self.y += self.speed * game_framework.frame_time
         elif self.y == 514 and self.x < 674:
-            self.x += self.speed
+            self.x += self.speed * game_framework.frame_time
         elif self.x == 674 and self.y > 100:
-            self.y -= self.speed
+            self.y -= self.speed * game_framework.frame_time
 
         if self.x == 674 and self.y < 100:
             object.remove_object(self)
@@ -107,7 +107,7 @@ class Boss:
             Boss.hp_font = load_font("font\\Cookie.otf")
         self.x = 124
         self.y = 100
-        self.speed = 0.2
+        self.speed = 33
         self.hp = 5000
         self.poison_damage_rate = 0
         self.poison_damage = 0
@@ -121,16 +121,19 @@ class Boss:
         game_framework.change_state(win_state)
 
     def update(self):
+        if (self.poison_damage_rate % 60) == 0:
+            self.hp -= self.poison_damage
+        self.poison_damage_rate += 1
         if self.y > 514:
             self.y = 514
         if self.x > 674:
             self.x = 674
         if self.x == 124 and self.y < 514:
-            self.y += self.speed
+            self.y += self.speed * game_framework.frame_time
         elif self.y == 514 and self.x < 674:
-            self.x += self.speed
+            self.x += self.speed * game_framework.frame_time
         elif self.x == 674 and self.y > 100:
-            self.y -= self.speed
+            self.y -= self.speed * game_framework.frame_time
 
         if self.x == 674 and self.y < 100:
             object.remove_object(self)
@@ -148,10 +151,11 @@ class Boss:
         self.hp_font.draw(self.x - 21, self.y, '%d' % self.hp, (255, 255, 255))
 
     def poison(self, damage):
+        self.poison_damage = damage - 10
         pass
 
     def slow(self):
-        self.speed = 0.12
+        self.speed = 27
         self.drawing_slow_effect = True
 
     def lock(self):
