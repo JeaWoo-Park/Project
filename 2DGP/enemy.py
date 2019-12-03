@@ -55,7 +55,10 @@ class Enemy:
         self.lock_timer = 0
 
     def unlock(self):
-        self.speed = 0.2
+        if self.drawing_slow_effect:
+            self.speed = 25
+        else:
+            self.speed = 30
         self.locking = False
 
     def die(self):

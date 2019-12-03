@@ -46,12 +46,14 @@ sp_font = None
 boss_timer_font = None
 boss_timer = 100
 boss_round = False
+start_time = 0
 sp = None
 
 
 def enter():
-    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font
+    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time
     sp = sp_point.SP()
+    start_time = get_time()
     object.add_object(sp, 2)
     sp_font = load_font("font\\Cookie.otf", 11)
     boss_timer_font = load_font("font\\Cookie.otf", 24)
@@ -475,7 +477,7 @@ def draw():
 
     if not boss_round:
         boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
-        boss_timer = 100
+        boss_timer = 10 + start_time
     else:
         boss_timer_font.draw(350, 585, '!!!BOSS!!!', (255, 0, 0))
 
