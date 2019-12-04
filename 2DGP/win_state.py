@@ -1,5 +1,6 @@
 from pico2d import *
 import game_framework
+import start_state
 
 time = 0
 image = None
@@ -19,8 +20,8 @@ def exit():
 def update():
     global time
     time += 1
-    if time == 3000:
-        game_framework.quit()
+    if time == 300:
+        game_framework.change_state(start_state)
     pass
 
 

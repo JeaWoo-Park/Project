@@ -5,7 +5,7 @@ import dice_manager
 
 
 class Lock_Dice:
-    def __init__(self, index):
+    def __init__(self, index, attack_power):
         self.drag = False
         self.level = 1
         self.index = index + 1
@@ -16,6 +16,7 @@ class Lock_Dice:
         self.y = self.position.y
         self.timer = 0
         self.attack_speed = 60
+        self.attack_power = attack_power
 
     def update(self):
         self.timer = (self.timer + 1) % self.attack_speed
@@ -78,65 +79,65 @@ class Lock_Dice:
 
     def attack(self):
         if self.level == 1:
-            bullet = Lock_Bullet(self.x + 2, self.y)
+            bullet = Lock_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 2:
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 3:
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x + 2, self.y)
+            bullet = Lock_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 4:
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 5:
-            bullet = Lock_Bullet(self.x + 2, self.y)
+            bullet = Lock_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 6:
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x - 15 + 2, self.y)
+            bullet = Lock_Bullet(self.x - 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Lock_Bullet(self.x + 15 + 2, self.y)
+            bullet = Lock_Bullet(self.x + 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
 
 
 class Lock_Bullet:
-    def __init__(self, x, y):
+    def __init__(self, x, y, attack_power):
         self.image = load_image("image\\lock_bullet.png")
-        self.attack_power = 20
+        self.attack_power = attack_power
         self.frame = 0
         self.target = object.bring_object(0, 0)
         if self.target.locking:

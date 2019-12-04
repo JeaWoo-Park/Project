@@ -4,7 +4,7 @@ import dice_manager
 
 
 class Ice_Dice:
-    def __init__(self, index):
+    def __init__(self, index, attack_power):
         self.drag = False
         self.level = 1
         self.index = index + 1
@@ -15,6 +15,7 @@ class Ice_Dice:
         self.y = self.position.y
         self.timer = 90
         self.attack_speed = 90
+        self.attack_power = attack_power
 
     def update(self):
         self.timer = (self.timer + 1) % self.attack_speed
@@ -78,66 +79,66 @@ class Ice_Dice:
     def attack(self):
 
         if self.level == 1:
-            bullet = Ice_Bullet(self.x + 2, self.y)
+            bullet = Ice_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 2:
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 3:
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x + 2, self.y)
+            bullet = Ice_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 4:
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 5:
-            bullet = Ice_Bullet(self.x + 2, self.y)
+            bullet = Ice_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 6:
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x - 15 + 2, self.y)
+            bullet = Ice_Bullet(self.x - 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Ice_Bullet(self.x + 15 + 2, self.y)
+            bullet = Ice_Bullet(self.x + 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
 
 
 class Ice_Bullet:
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, attack_power):
         self.image = load_image("image\\ice_bullet.png")
-        self.attack_power = 20
+        self.attack_power = attack_power
         self.frame = 0
         self.target = object.bring_object(0, 0)
         if self.target.locking:

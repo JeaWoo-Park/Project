@@ -85,6 +85,11 @@ class Manager:
         self.type = None
         self.index = idx
         self.unit = None
+        self.fire_damage = 35
+        self.lock_damage = 20
+        self.ice_damage = 20
+        self.wind_damage = 15
+        self.poison_damage = 25
 
     def create(self):
         self.type = random.randint(0, 4)
@@ -105,3 +110,17 @@ class Manager:
 
         self.exist = True
 
+    def upgrade_fire(self):
+        self.fire_damage += 20
+
+    def upgrade_ice(self):
+        self.ice_damage += 20
+
+    def upgrade_poison(self):
+        self.poison_damage += 20
+
+    def upgrade_lock(self):
+        self.lock_damage += 20
+
+    def upgrade_wind(self):
+        self.wind_damage += 20

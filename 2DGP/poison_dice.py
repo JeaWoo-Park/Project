@@ -5,7 +5,7 @@ import random
 
 
 class Poison_Dice:
-    def __init__(self, index):
+    def __init__(self, index, attack_power):
         self.drag = False
         self.level = 1
         self.index = index + 1
@@ -16,6 +16,7 @@ class Poison_Dice:
         self.y = self.position.y
         self.timer = 0
         self.attack_speed = 600
+        self.attack_power = attack_power
 
     def update(self):
 
@@ -81,67 +82,67 @@ class Poison_Dice:
     def attack(self):
 
         if self.level == 1:
-            bullet = Poison_Bullet(self.x + 2, self.y)
+            bullet = Poison_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 2:
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 3:
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x + 2, self.y)
+            bullet = Poison_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 4:
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 5:
-            bullet = Poison_Bullet(self.x + 2, self.y)
+            bullet = Poison_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 6:
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x - 15 + 2, self.y)
+            bullet = Poison_Bullet(self.x - 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Poison_Bullet(self.x + 15 + 2, self.y)
+            bullet = Poison_Bullet(self.x + 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
 
 
 class Poison_Bullet:
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, attack_power):
         self.image = load_image("image\\poison_bullet.png")
-        self.attack_power = 10
-        self.poison_damage = 15
+        self.attack_power = attack_power
+        self.poison_damage = attack_power - 10
         self.frame = 0
         self.target = object.bring_object(0, random.randint(0, len(object.objects[0]) - 1))
         if self.target.x == 124 and self.target.y < 514:

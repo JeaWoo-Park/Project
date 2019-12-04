@@ -4,11 +4,12 @@ import dice_manager
 
 
 class Fire_Dice:
-    def __init__(self, index):
+    def __init__(self, index, attack_power):
         self.drag = False
         self.level = 1
         self.index = index + 1
         self.attack_speed = 90
+        self.attack_power = attack_power
         self.image = load_image('image\\fire_dice.png')
         self.bullet = load_image('image\\fire_bullet.png')
         self.position = dice_manager.DicePosition(self.index)
@@ -80,66 +81,66 @@ class Fire_Dice:
     def attack(self):
 
         if self.level == 1:
-            bullet = Fire_Bullet(self.x + 2, self.y)
+            bullet = Fire_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 2:
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 3:
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x + 2, self.y)
+            bullet = Fire_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 4:
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 5:
-            bullet = Fire_Bullet(self.x + 2, self.y)
+            bullet = Fire_Bullet(self.x + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
             pass
         elif self.level == 6:
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y + 15)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y + 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y - 15)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y - 15, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x - 15 + 2, self.y)
+            bullet = Fire_Bullet(self.x - 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
-            bullet = Fire_Bullet(self.x + 15 + 2, self.y)
+            bullet = Fire_Bullet(self.x + 15 + 2, self.y, self.attack_power)
             object.add_object(bullet, 1)
             pass
 
 
 class Fire_Bullet:
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, attack_power):
         self.image = load_image("image\\fire_bullet.png")
-        self.attack_power = 40
+        self.attack_power = attack_power
         self.frame = 0
         self.target = object.bring_object(0, 0)
         if self.target.locking:
