@@ -27,10 +27,10 @@ def Create_Dice():
     if dice[idx].exist:
         Create_Dice()
         return
-    if object.bring_object(2, 0).need_point <= object.bring_object(2, 0).point:
+    if object.bring_object(3, 0).need_point <= object.bring_object(3, 0).point:
         dice[idx].create()
-        object.bring_object(2, 0).point -= object.bring_object(2, 0).need_point
-        object.bring_object(2, 0).need_point += 10
+        object.bring_object(3, 0).point -= object.bring_object(3, 0).need_point
+        object.bring_object(3, 0).need_point += 10
     else:
         return
 
@@ -54,8 +54,8 @@ def enter():
     global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time
     sp = sp_point.SP()
     start_time = get_time()
-    object.add_object(sp, 2)
-    sp_font = load_font("font\\Cookie.otf", 11)
+    object.add_object(sp, 3)
+
     boss_timer_font = load_font("font\\Cookie.otf", 24)
     life = Life()
     buy_button = Buy_Button()
@@ -476,8 +476,6 @@ def draw():
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
-    sp_font.draw(200, 105, '%d' % sp.point, (255, 255, 255))
-    sp_font.draw(400, 105, '%d' % sp.need_point, (255, 255, 255))
 
     if not boss_round:
         boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
