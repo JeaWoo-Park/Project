@@ -5,9 +5,9 @@ from buy_button import Buy_Button
 from life import Life
 from enemy import Enemy
 from enemy import Boss
+from sp_point import SP
 import dice_manager
 import game_framework
-import sp_point
 
 import object
 
@@ -51,11 +51,11 @@ sp = None
 
 
 def enter():
-    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time
-    sp = sp_point.SP()
+    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time, boss_round
+    sp = SP()
     start_time = get_time()
     object.add_object(sp, 3)
-
+    boss_round = False
     boss_timer_font = load_font("font\\Cookie.otf", 24)
     life = Life()
     buy_button = Buy_Button()
@@ -70,7 +70,8 @@ def enter():
 
 
 def exit():
-    object.clear()
+    global background
+    background = None
 
 
 def pause():

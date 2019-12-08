@@ -21,7 +21,7 @@ def update():
     global time
     time += 1
     if time == 300:
-        game_framework.change_state(start_state)
+        game_framework.quit()
     pass
 
 

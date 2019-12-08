@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 import reset_state
+import start_state
 
 image = None
 time = 0
@@ -21,9 +22,7 @@ def update():
     global time
     time += 1
     if time == 300:
-        pico2d.close_canvas()
-        pico2d.open_canvas(800, 600, sync=True)
-        game_framework.change_state(reset_state)
+        game_framework.quit()
     pass
 
 

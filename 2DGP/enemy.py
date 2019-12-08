@@ -23,7 +23,7 @@ class Enemy:
             Enemy.slow_effect = load_image("image\\slow_enemy.png")
         self.x = 124
         self.y = 100
-        self.speed = 30
+        self.speed = 90
         self.hp = 500
         self.poison_damage_rate = 0
         self.poison_damage = 0
@@ -66,7 +66,7 @@ class Enemy:
         object.bring_object(3, 0).point += 10
 
     def update(self):
-        if (self.poison_damage_rate % 600) == 0:
+        if (self.poison_damage_rate % 60) == 0:
             self.hp -= self.poison_damage
         self.poison_damage_rate += 1
         self.lock_timer += 1
