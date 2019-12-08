@@ -94,19 +94,19 @@ class Manager:
     def create(self):
         self.type = random.randint(0, 4)
         if self.type == 0:
-            self.unit = fire_dice.Fire_Dice(self.index)
+            self.unit = fire_dice.Fire_Dice(self.index, self.fire_damage)
 
         elif self.type == 1:
-            self.unit = ice_dice.Ice_Dice(self.index)
+            self.unit = ice_dice.Ice_Dice(self.index, self.ice_damage)
 
         elif self.type == 2:
-            self.unit = wind_dice.Wind_Dice(self.index)
+            self.unit = wind_dice.Wind_Dice(self.index, self.wind_damage)
 
         elif self.type == 3:
-            self.unit = lock_dice.Lock_Dice(self.index)
+            self.unit = lock_dice.Lock_Dice(self.index, self.lock_damage)
 
         elif self.type == 4:
-            self.unit = poison_dice.Poison_Dice(self.index)
+            self.unit = poison_dice.Poison_Dice(self.index, self.poison_damage)
 
         self.exist = True
 
@@ -124,3 +124,9 @@ class Manager:
 
     def upgrade_wind(self):
         self.wind_damage += 20
+
+    def update(self):
+        pass
+
+    def draw(self):
+        pass

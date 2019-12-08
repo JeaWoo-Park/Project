@@ -21,6 +21,8 @@ def update():
     global time
     time += 1
     if time == 300:
+        pico2d.close_canvas()
+        pico2d.open_canvas(800, 600, sync=True)
         game_framework.change_state(start_state)
     pass
 

@@ -63,6 +63,10 @@ def enter():
     dice = [dice_manager.Manager(i) for i in range(16)]
     frame = 1
     spawn_rate = 300
+    for d in dice:
+        object.add_object(d, 2)
+    object.add_object(life, 2)
+    object.add_object(buy_button, 2)
 
 
 def exit():

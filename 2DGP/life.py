@@ -7,6 +7,9 @@ class Life:
     def __init__(self):
         self.image = load_image("image\\life.png")
 
+    def update(self):
+        pass
+
     def draw(self):
         if self.life_amount > 0:
             self.image.draw(750, 540)
