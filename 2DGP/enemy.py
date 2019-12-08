@@ -23,7 +23,7 @@ class Enemy:
             Enemy.slow_effect = load_image("image\\slow_enemy.png")
         self.x = 124
         self.y = 100
-        self.speed = 90
+        self.speed = 30
         self.hp = 500
         self.poison_damage_rate = 0
         self.poison_damage = 0

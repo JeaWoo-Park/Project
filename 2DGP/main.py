@@ -47,11 +47,15 @@ boss_timer_font = None
 boss_timer = 100
 boss_round = False
 start_time = 0
+music = None
 sp = None
 
 
 def enter():
-    global life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time, boss_round
+    global music, life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time, boss_round
+    music = load_music('sound\\main.mp3')
+    music.set_volume(64)
+    music.repeat_play()
     sp = SP()
     start_time = get_time()
     object.add_object(sp, 3)
@@ -70,8 +74,11 @@ def enter():
 
 
 def exit():
-    global background
-    background = None
+    global background, music
+
+    del background
+    music.stop()
+    del music
 
 
 def pause():
