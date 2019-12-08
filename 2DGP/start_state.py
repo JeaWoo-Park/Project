@@ -3,17 +3,23 @@ import game_framework
 import main
 
 image = None
+music = None
 time = 0
 
 def enter():
-    global image
+    global image, music
     image = load_image('image\\start_image.png')
+    music = load_music('sound\\menu.mp3')
+    music.set_volume(64)
+    music.repeat_play()
     pass
 
 
 def exit():
-    global image
+    global image, music
+    music.stop()
     del image
+    del music
     pass
 
 
