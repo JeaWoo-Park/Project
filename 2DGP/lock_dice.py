@@ -171,7 +171,7 @@ class Lock_Bullet:
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
             self.target.hp -= self.attack_power
-            self.lock_chance = random.randint(0, 20)
+            self.lock_chance = random.randint(0, 50)
             if self.lock_chance == 1:
                 self.target.lock()
         if self.target.hp < 1:
