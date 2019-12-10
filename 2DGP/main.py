@@ -1,11 +1,11 @@
 from pico2d import *
 import random
-from fire_dice import Fire_Dice
 from buy_button import Buy_Button
 from life import Life
 from enemy import Enemy
 from enemy import Boss
 from sp_point import SP
+import sp_point
 import dice_manager
 import game_framework
 
@@ -51,10 +51,21 @@ music = None
 sp = None
 enemy_hp = 100
 enemy_count = 1
+fire = None
+ice = None
+poison = None
+lock = None
+wind = None
 
 
 def enter():
-    global music, life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time, boss_round
+    global music, life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time
+    global boss_round, fire, lock, poison, ice, wind
+    fire = load_image('image\\fire_dice.png')
+    ice = load_image('image\\ice_dice.png')
+    lock = load_image('image\\lock_dice.png')
+    poison = load_image('image\\poison_dice.png')
+    wind = load_image('image\\wind_dice.png')
     music = load_music('sound\\main.mp3')
     music.set_volume(80)
     music.repeat_play()
@@ -98,6 +109,7 @@ def handle_events():
     global x
     global y
     global running
+    global sp
     events = get_events()
     for event in events:
         if event.type == SDL_MOUSEMOTION:
@@ -106,9 +118,9 @@ def handle_events():
             else:
                 buy_button.mouse = False
         if event.type == SDL_MOUSEBUTTONUP:
-            print('button UP')
-            stack += 1
-            print(stack)
+            #print('button UP')
+            #stack += 1
+            #print(stack)
             if event.button == SDL_BUTTON_LEFT:
                 if 255 < event.x < 324 and 599 - 452 < event.y < 599 - 383:
                     if dice[0].unit is not None and dice[index].unit is not None:
@@ -450,6 +462,47 @@ def handle_events():
                 y = dice[15].unit.position.y
                 dice[15].unit.on_drag()
 
+            elif 198 - 31 < event.x < 198 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
+                if sp_point.fire_upgrade_level < 4 and sp.fire_point <= sp.point:
+                    sp_point.fire_upgrade_level += 1
+                    sp.point -= sp.fire_point
+                    for d in dice:
+                        d.upgrade_fire()
+                else:
+                    pass
+            elif 298 - 31 < event.x < 298 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
+                if sp_point.ice_upgrade_level < 4 and sp.ice_point <= sp.point:
+                    sp_point.ice_upgrade_level += 1
+                    sp.point -= sp.ice_point
+                    for d in dice:
+                        d.upgrade_ice()
+                else:
+                    pass
+            elif 398 - 31 < event.x < 398 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
+                if sp_point.poison_upgrade_level < 4 and sp.poison_point <= sp.point:
+                    sp_point.poison_upgrade_level += 1
+                    sp.point -= sp.poison_point
+                    for d in dice:
+                        d.upgrade_poison()
+                else:
+                    pass
+            elif 498 - 31 < event.x < 498 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
+                if sp_point.lock_upgrade_level < 4 and sp.lock_point <= sp.point:
+                    sp_point.lock_upgrade_level += 1
+                    sp.point -= sp.lock_point
+                    for d in dice:
+                        d.upgrade_lock()
+                else:
+                    pass
+            elif 598 - 31 < event.x < 598 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
+                if sp_point.wind_upgrade_level < 4 and sp.wind_point <= sp.point:
+                    sp_point.wind_upgrade_level += 1
+                    sp.point -= sp.wind_point
+                    for d in dice:
+                        d.upgrade_wind()
+                else:
+                    pass
+
 
 def update():
     global frame
@@ -467,7 +520,7 @@ def update():
     if not boss_round:
         if frame % spawn_rate == 0:
             frame = 1
-            enemy_count = ((enemy_count + 1 )% 5)
+            enemy_count = ((enemy_count + 1) % 5)
             spawn_rate = 120
             enemy = Enemy(enemy_hp)
             object.add_object(enemy, 0)
@@ -492,6 +545,11 @@ def draw():
     clear_canvas()
     background.draw(400, 300)
     buy_button.draw()
+    fire.draw(198, 46, 90, 90)
+    ice.draw(298, 46, 90, 90)
+    poison.draw(398, 46, 90, 90)
+    lock.draw(498, 46, 90, 90)
+    wind.draw(598, 46, 90, 90)
 
     if not boss_round:
         boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
@@ -511,5 +569,6 @@ def draw():
     for all_object in object.all_objects():
         all_object.draw()
     life.draw()
+
 
     update_canvas()
