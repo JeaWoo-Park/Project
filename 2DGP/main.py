@@ -532,7 +532,7 @@ def update():
             enemy = Enemy(enemy_hp)
             object.add_object(enemy, 0)
             if enemy_count == 0:
-                enemy_hp += 25
+                enemy_hp += 40
 
     elif boss_round and len(object.objects[0]) == 0:
         enemy = Boss()
