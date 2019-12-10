@@ -115,7 +115,7 @@ class Boss:
         self.x = 124
         self.y = 100
         self.speed = 33
-        self.hp = 5000
+        self.hp = 25000
         self.poison_damage_rate = 0
         self.poison_damage = 0
         self.lock_timer = 0

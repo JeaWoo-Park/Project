@@ -17,7 +17,8 @@ def enter():
 
 
 def exit():
-    global image
+    global image, music
+    del music
     del image
     pass
 
