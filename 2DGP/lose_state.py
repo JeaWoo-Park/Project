@@ -5,9 +5,13 @@ import start_state
 
 image = None
 time = 0
-
+music = None
 def enter():
     global image
+    global music
+    music = load_music('sound\\game-lost.ogg')
+    music.set_volume(60)
+    music.play()
     image = load_image('image\\lose.png')
     pass
 

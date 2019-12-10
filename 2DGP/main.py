@@ -34,7 +34,7 @@ def Create_Dice():
     else:
         return
 
-play_time = 15
+play_time = 300
 life = None
 buy_button = None
 background = None
