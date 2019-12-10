@@ -27,7 +27,7 @@ class Enemy:
             Enemy.slow_sound.set_volume(60)
         self.x = 124
         self.y = 100
-        self.speed = 30
+        self.speed = 40
         self.hp = hp
         self.poison_damage_rate = 0
         self.poison_damage = 0
@@ -56,7 +56,7 @@ class Enemy:
         self.drawing_poison_effect = True
 
     def slow(self):
-        self.speed = 25
+        self.speed = 32
         self.drawing_slow_effect = True
         self.slow_sound.play()
 

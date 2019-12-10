@@ -589,7 +589,7 @@ def update():
         if frame % spawn_rate == 0:
             frame = 1
             enemy_count = ((enemy_count + 1) % 7)
-            spawn_rate = 120
+            spawn_rate = 90
             enemy = Enemy(enemy_hp)
             object.add_object(enemy, 0)
             if enemy_count == 0:
