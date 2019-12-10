@@ -588,12 +588,12 @@ def update():
     if not boss_round:
         if frame % spawn_rate == 0:
             frame = 1
-            enemy_count = ((enemy_count + 1) % 5)
+            enemy_count = ((enemy_count + 1) % 7)
             spawn_rate = 120
             enemy = Enemy(enemy_hp)
             object.add_object(enemy, 0)
             if enemy_count == 0:
-                enemy_hp += 30
+                enemy_hp += 40
 
     elif boss_round and len(object.objects[0]) == 0:
         enemy = Boss()
