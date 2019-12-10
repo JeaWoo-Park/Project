@@ -34,8 +34,7 @@ def Create_Dice():
     else:
         return
 
-
-stack = 1
+play_time = 15
 life = None
 buy_button = None
 background = None
@@ -48,6 +47,7 @@ boss_timer = 100
 boss_round = False
 start_time = 0
 music = None
+upgrade_sound = None
 sp = None
 enemy_hp = 100
 enemy_count = 1
@@ -60,7 +60,9 @@ wind = None
 
 def enter():
     global music, life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time
-    global boss_round, fire, lock, poison, ice, wind
+    global boss_round, fire, lock, poison, ice, wind, upgrade_sound
+    upgrade_sound = load_wav('sound\\upgrade.wav')
+    upgrade_sound.set_volume(60)
     fire = load_image('image\\fire_dice.png')
     ice = load_image('image\\ice_dice.png')
     lock = load_image('image\\lock_dice.png')
@@ -468,6 +470,7 @@ def handle_events():
                     sp.point -= sp.fire_point
                     for d in dice:
                         d.upgrade_fire()
+                    upgrade_sound.play()
                 else:
                     pass
             elif 298 - 31 < event.x < 298 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
@@ -476,6 +479,7 @@ def handle_events():
                     sp.point -= sp.ice_point
                     for d in dice:
                         d.upgrade_ice()
+                    upgrade_sound.play()
                 else:
                     pass
             elif 398 - 31 < event.x < 398 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
@@ -484,6 +488,7 @@ def handle_events():
                     sp.point -= sp.poison_point
                     for d in dice:
                         d.upgrade_poison()
+                    upgrade_sound.play()
                 else:
                     pass
             elif 498 - 31 < event.x < 498 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
@@ -492,6 +497,7 @@ def handle_events():
                     sp.point -= sp.lock_point
                     for d in dice:
                         d.upgrade_lock()
+                    upgrade_sound.play()
                 else:
                     pass
             elif 598 - 31 < event.x < 598 + 31 and 599 - 46 - 31 < event.y < 599 - 46 + 31:
@@ -500,6 +506,7 @@ def handle_events():
                     sp.point -= sp.wind_point
                     for d in dice:
                         d.upgrade_wind()
+                    upgrade_sound.play()
                 else:
                     pass
 
@@ -553,7 +560,7 @@ def draw():
 
     if not boss_round:
         boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
-        boss_timer = 100 + start_time
+        boss_timer = play_time + start_time
     else:
         boss_timer_font.draw(350, 585, '!!!BOSS!!!', (255, 0, 0))
 

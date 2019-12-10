@@ -4,15 +4,21 @@ import start_state
 
 time = 0
 image = None
+music = None
+
 
 def enter():
-    global image
+    global image, music
     image = load_image('image\\win.png')
+    music = load_music('sound\\victory.mp3')
+    music.set_volume(100)
+    music.play()
     pass
 
 
 def exit():
-    global image
+    global image, music
+    del music
     del image
     pass
 

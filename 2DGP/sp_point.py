@@ -51,7 +51,6 @@ class SP:
         else:
             self.font.draw(190, 46, 'max', (0, 0, 0))
 
-
     def update(self):
         if wind_upgrade_level == 1:
             self.wind_point = LEVEL_1_POINT
