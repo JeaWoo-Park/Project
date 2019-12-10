@@ -11,6 +11,7 @@ class Enemy:
     slow_effect = None
     poison_effect = None
     hp_font = None
+    slow_sound = None
 
     def __init__(self):
         if Enemy.hp_font is None:
@@ -21,6 +22,9 @@ class Enemy:
             Enemy.image = load_image("image\\enemy.png")
         if Enemy.slow_effect is None:
             Enemy.slow_effect = load_image("image\\slow_enemy.png")
+        if Enemy.slow_sound is None:
+            Enemy.slow_sound = load_wav("sound\\ice_effect.wav")
+            Enemy.slow_sound.set_volume(60)
         self.x = 124
         self.y = 100
         self.speed = 30
@@ -48,6 +52,7 @@ class Enemy:
     def slow(self):
         self.speed = 25
         self.drawing_slow_effect = True
+        self.slow_sound.play()
 
     def lock(self):
         self.speed = 0

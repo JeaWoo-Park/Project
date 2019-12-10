@@ -54,7 +54,7 @@ sp = None
 def enter():
     global music, life, buy_button, background, dice, frame, spawn_rate, sp_font, sp, boss_timer_font, start_time, boss_round
     music = load_music('sound\\main.mp3')
-    music.set_volume(64)
+    music.set_volume(80)
     music.repeat_play()
     sp = SP()
     start_time = get_time()

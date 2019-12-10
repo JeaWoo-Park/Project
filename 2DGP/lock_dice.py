@@ -155,6 +155,11 @@ class Lock_Bullet:
         self.lock_chance = 0
         self.x = x
         self.y = y
+        self.fire_bgm = load_wav('sound\\shot.wav')
+        self.struck_bgm = load_wav('sound\\shot-struck.wav')
+        self.fire_bgm.set_volume(50)
+        self.struck_bgm.set_volume(50)
+        self.fire_bgm.play()
 
     def fire(self):
         t = self.frame / 100
@@ -172,6 +177,7 @@ class Lock_Bullet:
             object.remove_object(self)
             self.target.hp -= self.attack_power
             self.lock_chance = random.randint(0, 50)
+            self.struck_bgm.play()
             if self.lock_chance == 1:
                 self.target.lock()
         if self.target.hp < 1:

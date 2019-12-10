@@ -140,6 +140,11 @@ class Wind_Bullet:
         self.attack_power = attack_power
         self.frame = 0
         self.target = object.bring_object(0, 0)
+        self.fire_bgm = load_wav('sound\\shot.wav')
+        self.struck_bgm = load_wav('sound\\shot-struck.wav')
+        self.fire_bgm.set_volume(50)
+        self.struck_bgm.set_volume(50)
+        self.fire_bgm.play()
         if self.target.locking:
             if len(object.objects[0]) > 1:
                 self.target = object.bring_object(0, 1)
@@ -171,6 +176,7 @@ class Wind_Bullet:
         if self.target_x - 30 < self.x < self.target_x + 30 and self.target_y - 30 < self.y < self.target_y + 30:
             object.remove_object(self)
             self.target.hp -= self.attack_power
+            self.struck_bgm.play()
         if self.target.hp < 1:
             object.remove_object(self)
 

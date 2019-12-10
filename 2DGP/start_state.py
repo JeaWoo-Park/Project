@@ -10,7 +10,7 @@ def enter():
     global image, music
     image = load_image('image\\start_image.png')
     music = load_music('sound\\menu.mp3')
-    music.set_volume(64)
+    music.set_volume(80)
     music.repeat_play()
     pass
 
