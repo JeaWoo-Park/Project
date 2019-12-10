@@ -52,6 +52,7 @@ class Fire_Dice:
                     self.y = 599 - event.y
         elif not self.drag:
             self.go_back()
+        self.check()
 
     def go_back(self):
         self.x = self.position.x
