@@ -35,14 +35,12 @@ class Enemy:
         self.locking = False
         self.drawing_slow_effect = False
         self.drawing_poison_effect = False
-        if 100 <= self.hp < 400:
+        if 100 <= self.hp < 600:
             self.give_point = 10
-        elif 400 <= self.hp < 700:
+        elif 600 <= self.hp < 1000:
             self.give_point = 15
-        elif 700 <= self.hp < 1000:
-            self.give_point = 20
         else:
-            self.give_point = 25
+            self.give_point = 20
 
     def draw(self):
         if self.drawing_poison_effect:
