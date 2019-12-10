@@ -38,11 +38,11 @@ class Enemy:
         if 100 <= self.hp < 400:
             self.give_point = 10
         elif 400 <= self.hp < 700:
-            self.give_point = 20
+            self.give_point = 15
         elif 700 <= self.hp < 1000:
-            self.give_point = 30
+            self.give_point = 20
         else:
-            self.give_point = 40
+            self.give_point = 25
 
     def draw(self):
         if self.drawing_poison_effect:
