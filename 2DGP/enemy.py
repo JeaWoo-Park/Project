@@ -35,6 +35,14 @@ class Enemy:
         self.locking = False
         self.drawing_slow_effect = False
         self.drawing_poison_effect = False
+        if 100 <= self.hp < 400:
+            self.give_point = 10
+        elif 400 <= self.hp < 700:
+            self.give_point = 20
+        elif 700 <= self.hp < 1000:
+            self.give_point = 30
+        else:
+            self.give_point = 40
 
     def draw(self):
         if self.drawing_poison_effect:
@@ -68,7 +76,7 @@ class Enemy:
 
     def die(self):
         object.remove_object(self)
-        object.bring_object(3, 0).point += 10
+        object.bring_object(3, 0).point += self.give_point
 
     def update(self):
         if (self.poison_damage_rate % 60) == 0:
