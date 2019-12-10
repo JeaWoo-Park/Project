@@ -16,6 +16,28 @@ class Fire_Dice:
         self.x = self.position.x
         self.y = self.position.y
         self.timer = 0
+        self.sp_upgrade_level = 1
+
+    def check(self):
+        if self.sp_upgrade_level == 1:
+            self.attack_power = 35
+        elif self.sp_upgrade_level == 2:
+            self.attack_power = 55
+        elif self.sp_upgrade_level == 3:
+            self.attack_power = 75
+
+        if self.level == 1:
+            self.attack_speed = 90
+        elif self.level == 2:
+            self.attack_speed = 87
+        elif self.level == 3:
+            self.attack_speed = 84
+        elif self.level == 4:
+            self.attack_speed = 81
+        elif self.level == 5:
+            self.attack_speed = 78
+        elif self.level == 6:
+            self.attack_speed = 75
 
     def update(self):
 

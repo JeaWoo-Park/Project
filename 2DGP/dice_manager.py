@@ -86,10 +86,15 @@ class Manager:
         self.index = idx
         self.unit = None
         self.fire_damage = 35
+        self.fire_upgrade_level = 1
         self.lock_damage = 20
+        self.lock_upgrade_level = 1
         self.ice_damage = 20
+        self.ice_upgrade_level = 1
         self.wind_damage = 15
+        self.wind_upgrade_level = 1
         self.poison_damage = 25
+        self.poison_upgrade_level = 1
 
     def create(self):
         self.type = random.randint(0, 4)
@@ -112,18 +117,33 @@ class Manager:
 
     def upgrade_fire(self):
         self.fire_damage += 20
+        self.fire_upgrade_level += 1
+        if self.type == 0 and self.exist:
+            self.unit.sp_upgrade_level = self.fire_upgrade_level
 
     def upgrade_ice(self):
         self.ice_damage += 20
+        self.ice_upgrade_level += 1
+        if self.type == 1 and self.exist:
+            self.unit.sp_upgrade_level = self.ice_upgrade_level
 
     def upgrade_poison(self):
         self.poison_damage += 20
+        self.poison_upgrade_level += 1
+        if self.type == 4 and self.exist:
+            self.unit.sp_upgrade_level = self.poison_upgrade_level
 
     def upgrade_lock(self):
         self.lock_damage += 20
+        self.lock_upgrade_level += 1
+        if self.type == 3 and self.exist:
+            self.unit.sp_upgrade_level = self.lock_upgrade_level
 
     def upgrade_wind(self):
         self.wind_damage += 20
+        self.wind_upgrade_level += 1
+        if self.type == 2 and self.exist:
+            self.unit.sp_upgrade_level = self.wind_upgrade_level
 
     def update(self):
         pass

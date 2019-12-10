@@ -16,6 +16,28 @@ class Wind_Dice:
         self.timer = 0
         self.attack_speed = 30
         self.attack_power = attack_power
+        self.sp_upgrade_level = 1
+
+    def check(self):
+        if self.sp_upgrade_level == 1:
+            self.attack_power = 15
+        elif self.sp_upgrade_level == 2:
+            self.attack_power = 35
+        elif self.sp_upgrade_level == 3:
+            self.attack_power = 55
+
+        if self.level == 1:
+            self.attack_speed = 30
+        elif self.level == 2:
+            self.attack_speed = 27
+        elif self.level == 3:
+            self.attack_speed = 24
+        elif self.level == 4:
+            self.attack_speed = 21
+        elif self.level == 5:
+            self.attack_speed = 18
+        elif self.level == 6:
+            self.attack_speed = 15
 
     def update(self):
 

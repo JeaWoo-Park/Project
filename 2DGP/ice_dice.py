@@ -16,6 +16,28 @@ class Ice_Dice:
         self.timer = 90
         self.attack_speed = 90
         self.attack_power = attack_power
+        self.sp_upgrade_level = 1
+
+    def check(self):
+        if self.sp_upgrade_level == 1:
+            self.attack_power = 20
+        elif self.sp_upgrade_level == 2:
+            self.attack_power = 40
+        elif self.sp_upgrade_level == 3:
+            self.attack_power = 60
+
+        if self.level == 1:
+            self.attack_speed = 90
+        elif self.level == 2:
+            self.attack_speed = 87
+        elif self.level == 3:
+            self.attack_speed = 84
+        elif self.level == 4:
+            self.attack_speed = 81
+        elif self.level == 5:
+            self.attack_speed = 78
+        elif self.level == 6:
+            self.attack_speed = 75
 
     def update(self):
         self.timer = (self.timer + 1) % self.attack_speed

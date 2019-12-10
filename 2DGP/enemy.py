@@ -13,7 +13,7 @@ class Enemy:
     hp_font = None
     slow_sound = None
 
-    def __init__(self):
+    def __init__(self, hp):
         if Enemy.hp_font is None:
             Enemy.hp_font = load_font("font\\Cookie.otf", 15)
         if Enemy.poison_effect is None:
@@ -28,7 +28,7 @@ class Enemy:
         self.x = 124
         self.y = 100
         self.speed = 30
-        self.hp = 500
+        self.hp = hp
         self.poison_damage_rate = 0
         self.poison_damage = 0
         self.lock_timer = 0
@@ -101,18 +101,17 @@ class Enemy:
 class Boss:
     image = None
     slow_effect = None
-    poison_effect = None
     hp_font = None
 
     def __init__(self):
-        if Boss.poison_effect is None:
-            Boss.poison_effect = load_image("image\\poison_enemy.png")
         if Boss.image is None:
-            Boss.image = load_image("image\\enemy.png")
+            Boss.image = load_image("image\\boss.png")
         if Boss.slow_effect is None:
             Boss.slow_effect = load_image("image\\slow_enemy.png")
         if Boss.hp_font is None:
             Boss.hp_font = load_font("font\\Cookie.otf")
+        self.slow_sound = load_wav("sound\\ice_effect.wav")
+        self.slow_sound.set_volume(60)
         self.x = 124
         self.y = 100
         self.speed = 33
@@ -150,21 +149,19 @@ class Boss:
             self.die()
 
     def draw(self):
-        if self.drawing_poison_effect:
-            self.poison_effect.draw(self.x, self.y, 110, 110)
-        else:
-            self.image.draw(self.x, self.y, 170, 170)
+        self.image.draw(self.x, self.y, 300, 300)
         if self.drawing_slow_effect:
-            self.slow_effect.draw(self.x, self.y - 5, 170, 170)
-        self.hp_font.draw(self.x - 21, self.y, '%d' % self.hp, (255, 255, 255))
+            self.slow_effect.draw(self.x, self.y - 5, 180, 180)
+        self.hp_font.draw(self.x - 21, self.y - 7, '%d' % self.hp, (255, 255, 255))
 
     def poison(self, damage):
         self.poison_damage = damage - 10
         pass
 
     def slow(self):
-        self.speed = 27
+        self.speed = 24
         self.drawing_slow_effect = True
+        self.slow_sound.play()
 
     def lock(self):
         pass

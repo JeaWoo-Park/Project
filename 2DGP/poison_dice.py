@@ -15,8 +15,30 @@ class Poison_Dice:
         self.x = self.position.x
         self.y = self.position.y
         self.timer = 0
-        self.attack_speed = 600
+        self.attack_speed = 75
         self.attack_power = attack_power
+        self.sp_upgrade_level = 1
+
+    def check(self):
+        if self.sp_upgrade_level == 1:
+            self.attack_power = 25
+        elif self.sp_upgrade_level == 2:
+            self.attack_power = 45
+        elif self.sp_upgrade_level == 3:
+            self.attack_power = 65
+
+        if self.level == 1:
+            self.attack_speed = 75
+        elif self.level == 2:
+            self.attack_speed = 72
+        elif self.level == 3:
+            self.attack_speed = 69
+        elif self.level == 4:
+            self.attack_speed = 66
+        elif self.level == 5:
+            self.attack_speed = 63
+        elif self.level == 6:
+            self.attack_speed = 60
 
     def update(self):
 

@@ -49,6 +49,8 @@ boss_round = False
 start_time = 0
 music = None
 sp = None
+enemy_hp = 100
+enemy_count = 1
 
 
 def enter():
@@ -454,6 +456,8 @@ def update():
     global spawn_rate
     global boss_timer
     global boss_round
+    global enemy_hp
+    global enemy_count
 
     if boss_timer - get_time() > 0:
         boss_timer -= get_time()
@@ -463,9 +467,13 @@ def update():
     if not boss_round:
         if frame % spawn_rate == 0:
             frame = 1
+            enemy_count = ((enemy_count + 1 )% 5)
             spawn_rate = 120
-            enemy = Enemy()
+            enemy = Enemy(enemy_hp)
             object.add_object(enemy, 0)
+            if enemy_count == 0:
+                enemy_hp += 25
+
     elif boss_round and len(object.objects[0]) == 0:
         enemy = Boss()
         object.add_object(enemy, 0)
@@ -487,7 +495,7 @@ def draw():
 
     if not boss_round:
         boss_timer_font.draw(390, 585, '%d' % boss_timer, (255, 255, 255))
-        boss_timer = 10 + start_time
+        boss_timer = 100 + start_time
     else:
         boss_timer_font.draw(350, 585, '!!!BOSS!!!', (255, 0, 0))
 
@@ -503,4 +511,5 @@ def draw():
     for all_object in object.all_objects():
         all_object.draw()
     life.draw()
+
     update_canvas()
