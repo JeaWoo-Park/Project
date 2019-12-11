@@ -169,24 +169,19 @@ class Wind_Bullet:
         if self.target.locking:
             if len(object.objects[0]) > 1:
                 self.target = object.bring_object(0, 1)
-        if self.target.x == 124 and self.target.y < 514:
-            self.target_x = self.target.x
-            self.target_y = self.target.y + 20
-        elif self.target.y == 514 and self.target.x < 674:
-            self.target_x = self.target.x + 20
-            self.target_y = self.target.y
-        elif self.target.x == 674 and self.target.y > 100:
-            self.target_x = self.target.x
-            self.target_y = self.target.y - 20
-
+        self.target_x = self.target.x
+        self.target_y = self.target.y
         self.x = x
         self.y = y
 
     def fire(self):
-        t = self.frame / 100
-        self.x = (1 - t) * self.x + t * self.target_x
-        self.y = (1 - t) * self.y + t * self.target_y
-        self.image.draw(self.x, self.y, 95, 95)
+        if self.target is None:
+            object.remove_object(self)
+            return
+        else:
+            t = self.frame / 100
+            self.x = (1 - t) * self.x + t * self.target_x
+            self.y = (1 - t) * self.y + t * self.target_y
 
     def draw(self):
         self.image.draw(self.x, self.y, 95, 95)
@@ -200,4 +195,3 @@ class Wind_Bullet:
 
         if self.target.hp < 1:
             object.remove_object(self)
-
